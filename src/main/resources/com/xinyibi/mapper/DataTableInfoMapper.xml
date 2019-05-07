@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyibi.mapper.DataTableInfoMapper">
+  <resultMap id="BaseResultMap" type="com.xinyibi.pojo.DataTableInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="table_name" jdbcType="VARCHAR" property="tableName" />
+    <result column="table_zh_ch_name" jdbcType="VARCHAR" property="tableZhChName" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="db_id" jdbcType="VARCHAR" property="dbId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, table_name, table_zh_ch_name, type, add_time, db_id
+  </sql>
+  <select id="selectByExample" parameterType="com.xinyibi.pojo.DataTableInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from data_table_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from data_table_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from data_table_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xinyibi.pojo.DataTableInfoExample">
+    delete from data_table_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xinyibi.pojo.DataTableInfo">
+  	<selectKey keyProperty="id" resultType="long">select LAST_INSERT_ID()</selectKey>
+    insert into data_table_info (id, table_name, table_zh_ch_name, 
+      type, add_time, db_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{tableName,jdbcType=VARCHAR}, #{tableZhChName,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{dbId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xinyibi.pojo.DataTableInfo"> 
+    insert into data_table_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tableName != null">
+        table_name,
+      </if>
+      <if test="tableZhChName != null">
+        table_zh_ch_name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="dbId != null">
+        db_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="tableName != null">
+        #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="tableZhChName != null">
+        #{tableZhChName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dbId != null">
+        #{dbId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertList" parameterType="java.util.List"> 
+  	insert into data_table_info (id, table_name, table_zh_ch_name, 
+      type, add_time, db_id
+      ) values
+    <foreach collection="list" item="tab" separator="," >
+    (#{tab.id,jdbcType=VARCHAR}, #{tab.tableName,jdbcType=VARCHAR}, #{tab.tableZhChName,jdbcType=VARCHAR}, 
+      #{tab.type,jdbcType=VARCHAR}, #{tab.addTime,jdbcType=TIMESTAMP}, #{tab.dbId,jdbcType=VARCHAR}
+      )
+    </foreach>
+  </insert>
+
+  <select id="countByExample" parameterType="com.xinyibi.pojo.DataTableInfoExample" resultType="java.lang.Long">
+    select count(*) from data_table_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <!-- 通过数据视图的ID查找关联的数据表 -->
+  <select id="findByViewId" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+  		dt.id, dt.table_name, dt.table_zh_ch_name, dt.type, dt.add_time, dt.db_id 
+  	from data_table_info dt
+  	join table_field_info tf on dt.id = tf.tb_id
+  	join view_field_item item on item.table_field_id = tf.id
+  	join view_field on item.view_field_id = view_field.id
+  	where view_field.id = #{id}
+  </select>
+  
+  <update id="updateByExampleSelective" parameterType="map">
+    update data_table_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tableName != null">
+        table_name = #{record.tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tableZhChName != null">
+        table_zh_ch_name = #{record.tableZhChName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addTime != null">
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dbId != null">
+        db_id = #{record.dbId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update data_table_info
+    set id = #{record.id,jdbcType=VARCHAR},
+      table_name = #{record.tableName,jdbcType=VARCHAR},
+      table_zh_ch_name = #{record.tableZhChName,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      db_id = #{record.dbId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xinyibi.pojo.DataTableInfo">
+    update data_table_info
+    <set>
+      <if test="tableName != null">
+        table_name = #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="tableZhChName != null">
+        table_zh_ch_name = #{tableZhChName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dbId != null">
+        db_id = #{dbId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xinyibi.pojo.DataTableInfo">
+    update data_table_info
+    set table_name = #{tableName,jdbcType=VARCHAR},
+      table_zh_ch_name = #{tableZhChName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      db_id = #{dbId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

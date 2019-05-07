@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyibi.mapper.TableViewMapper">
+  <resultMap id="BaseResultMap" type="com.xinyibi.pojo.TableView">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="view_name" jdbcType="VARCHAR" property="viewName" />
+    <result column="view_zh_ch_name" jdbcType="VARCHAR" property="viewZhChName" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="data_set_id" jdbcType="VARCHAR" property="dataSetId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, view_name, view_zh_ch_name, add_time, comment, data_set_id
+  </sql>
+  <select id="selectByExample" parameterType="com.xinyibi.pojo.TableViewExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from table_view
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from table_view
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from table_view
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xinyibi.pojo.TableViewExample">
+    delete from table_view
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xinyibi.pojo.TableView">
+    insert into table_view (id, view_name, view_zh_ch_name, 
+      add_time, comment, data_set_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{viewName,jdbcType=VARCHAR}, #{viewZhChName,jdbcType=VARCHAR}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{comment,jdbcType=VARCHAR}, #{dataSetId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xinyibi.pojo.TableView">
+    insert into table_view
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="viewName != null">
+        view_name,
+      </if>
+      <if test="viewZhChName != null">
+        view_zh_ch_name,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+      <if test="dataSetId != null">
+        data_set_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="viewName != null">
+        #{viewName,jdbcType=VARCHAR},
+      </if>
+      <if test="viewZhChName != null">
+        #{viewZhChName,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSetId != null">
+        #{dataSetId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertList" parameterType="java.util.List">
+  	insert into table_view (id, view_name, view_zh_ch_name, 
+      add_time, comment, data_set_id)
+    values 
+    <foreach collection="list" item="item" separator=",">
+    (#{item.id,jdbcType=VARCHAR}, #{item.viewName,jdbcType=VARCHAR}, #{item.viewZhChName,jdbcType=VARCHAR}, 
+      #{item.addTime,jdbcType=TIMESTAMP}, #{item.comment,jdbcType=VARCHAR}, #{item.dataSetId,jdbcType=VARCHAR}
+      )
+    </foreach>
+  </insert>
+  <select id="countByExample" parameterType="com.xinyibi.pojo.TableViewExample" resultType="java.lang.Long">
+    select count(*) from table_view
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update table_view
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.viewName != null">
+        view_name = #{record.viewName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.viewZhChName != null">
+        view_zh_ch_name = #{record.viewZhChName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addTime != null">
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.comment != null">
+        comment = #{record.comment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dataSetId != null">
+        data_set_id = #{record.dataSetId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update table_view
+    set id = #{record.id,jdbcType=VARCHAR},
+      view_name = #{record.viewName,jdbcType=VARCHAR},
+      view_zh_ch_name = #{record.viewZhChName,jdbcType=VARCHAR},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      comment = #{record.comment,jdbcType=VARCHAR},
+      data_set_id = #{record.dataSetId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xinyibi.pojo.TableView">
+    update table_view
+    <set>
+      <if test="viewName != null">
+        view_name = #{viewName,jdbcType=VARCHAR},
+      </if>
+      <if test="viewZhChName != null">
+        view_zh_ch_name = #{viewZhChName,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSetId != null">
+        data_set_id = #{dataSetId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xinyibi.pojo.TableView">
+    update table_view
+    set view_name = #{viewName,jdbcType=VARCHAR},
+      view_zh_ch_name = #{viewZhChName,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      comment = #{comment,jdbcType=VARCHAR},
+      data_set_id = #{dataSetId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

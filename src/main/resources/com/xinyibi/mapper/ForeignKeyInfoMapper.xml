@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyibi.mapper.ForeignKeyInfoMapper">
+  <resultMap id="BaseResultMap" type="com.xinyibi.pojo.ForeignKeyInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="foreign_key_name" jdbcType="VARCHAR" property="foreignKeyName" />
+    <result column="field_id" jdbcType="VARCHAR" property="fieldId" />
+    <result column="tb_id" jdbcType="VARCHAR" property="tbId" />
+    <result column="ref_tb_id" jdbcType="VARCHAR" property="refTbId" />
+    <result column="ref_fd_id" jdbcType="VARCHAR" property="refFdId" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, foreign_key_name, field_id, tb_id, ref_tb_id, ref_fd_id, add_time
+  </sql>
+  <select id="selectByExample" parameterType="com.xinyibi.pojo.ForeignKeyInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from foreign_key_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from foreign_key_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from foreign_key_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xinyibi.pojo.ForeignKeyInfoExample">
+    delete from foreign_key_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xinyibi.pojo.ForeignKeyInfo">
+    insert into foreign_key_info (id, foreign_key_name, field_id, 
+      tb_id, ref_tb_id, ref_fd_id, 
+      add_time)
+    values (#{id,jdbcType=VARCHAR}, #{foreignKeyName,jdbcType=VARCHAR}, #{fieldId,jdbcType=VARCHAR}, 
+      #{tbId,jdbcType=VARCHAR}, #{refTbId,jdbcType=VARCHAR}, #{refFdId,jdbcType=VARCHAR}, 
+      #{addTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xinyibi.pojo.ForeignKeyInfo">
+    insert into foreign_key_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="foreignKeyName != null">
+        foreign_key_name,
+      </if>
+      <if test="fieldId != null">
+        field_id,
+      </if>
+      <if test="tbId != null">
+        tb_id,
+      </if>
+      <if test="refTbId != null">
+        ref_tb_id,
+      </if>
+      <if test="refFdId != null">
+        ref_fd_id,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignKeyName != null">
+        #{foreignKeyName,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldId != null">
+        #{fieldId,jdbcType=VARCHAR},
+      </if>
+      <if test="tbId != null">
+        #{tbId,jdbcType=VARCHAR},
+      </if>
+      <if test="refTbId != null">
+        #{refTbId,jdbcType=VARCHAR},
+      </if>
+      <if test="refFdId != null">
+        #{refFdId,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertList" parameterType="java.util.List">
+   insert into foreign_key_info (id, foreign_key_name, field_id, 
+      tb_id, ref_tb_id, ref_fd_id, 
+      add_time)
+    values 
+    <foreach collection="list" item="fk" separator=",">
+    (#{fk.id,jdbcType=VARCHAR}, #{fk.foreignKeyName,jdbcType=VARCHAR}, #{fk.fieldId,jdbcType=VARCHAR}, 
+      #{fk.tbId,jdbcType=VARCHAR}, #{fk.refTbId,jdbcType=VARCHAR}, #{fk.refFdId,jdbcType=VARCHAR}, 
+      #{fk.addTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  <select id="countByExample" parameterType="com.xinyibi.pojo.ForeignKeyInfoExample" resultType="java.lang.Long">
+    select count(*) from foreign_key_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update foreign_key_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.foreignKeyName != null">
+        foreign_key_name = #{record.foreignKeyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fieldId != null">
+        field_id = #{record.fieldId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tbId != null">
+        tb_id = #{record.tbId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.refTbId != null">
+        ref_tb_id = #{record.refTbId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.refFdId != null">
+        ref_fd_id = #{record.refFdId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addTime != null">
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update foreign_key_info
+    set id = #{record.id,jdbcType=VARCHAR},
+      foreign_key_name = #{record.foreignKeyName,jdbcType=VARCHAR},
+      field_id = #{record.fieldId,jdbcType=VARCHAR},
+      tb_id = #{record.tbId,jdbcType=VARCHAR},
+      ref_tb_id = #{record.refTbId,jdbcType=VARCHAR},
+      ref_fd_id = #{record.refFdId,jdbcType=VARCHAR},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xinyibi.pojo.ForeignKeyInfo">
+    update foreign_key_info
+    <set>
+      <if test="foreignKeyName != null">
+        foreign_key_name = #{foreignKeyName,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldId != null">
+        field_id = #{fieldId,jdbcType=VARCHAR},
+      </if>
+      <if test="tbId != null">
+        tb_id = #{tbId,jdbcType=VARCHAR},
+      </if>
+      <if test="refTbId != null">
+        ref_tb_id = #{refTbId,jdbcType=VARCHAR},
+      </if>
+      <if test="refFdId != null">
+        ref_fd_id = #{refFdId,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xinyibi.pojo.ForeignKeyInfo">
+    update foreign_key_info
+    set foreign_key_name = #{foreignKeyName,jdbcType=VARCHAR},
+      field_id = #{fieldId,jdbcType=VARCHAR},
+      tb_id = #{tbId,jdbcType=VARCHAR},
+      ref_tb_id = #{refTbId,jdbcType=VARCHAR},
+      ref_fd_id = #{refFdId,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

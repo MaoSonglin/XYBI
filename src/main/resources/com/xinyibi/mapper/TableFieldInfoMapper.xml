@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyibi.mapper.TableFieldInfoMapper">
+  <resultMap id="BaseResultMap" type="com.xinyibi.pojo.TableFieldInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="field_name" jdbcType="VARCHAR" property="fieldName" />
+    <result column="field_zh_ch_name" jdbcType="VARCHAR" property="fieldZhChName" />
+    <result column="jdbc_type" jdbcType="VARCHAR" property="jdbcType" />
+    <result column="java_type" jdbcType="VARCHAR" property="javaType" />
+    <result column="length" jdbcType="INTEGER" property="length" />
+    <result column="primary_key" jdbcType="BIT" property="primaryKey" />
+    <result column="foreign_key" jdbcType="BIT" property="foreignKey" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="tb_id" jdbcType="VARCHAR" property="tbId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, field_name, field_zh_ch_name, jdbc_type, java_type, length, primary_key, foreign_key, 
+    comment, add_time, tb_id
+  </sql>
+  <select id="selectByExample" parameterType="com.xinyibi.pojo.TableFieldInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from table_field_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from table_field_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from table_field_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xinyibi.pojo.TableFieldInfoExample">
+    delete from table_field_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xinyibi.pojo.TableFieldInfo">
+    insert into table_field_info (id, field_name, field_zh_ch_name, 
+      jdbc_type, java_type, length, 
+      primary_key, foreign_key, comment, 
+      add_time, tb_id)
+    values (#{id,jdbcType=VARCHAR}, #{fieldName,jdbcType=VARCHAR}, #{fieldZhChName,jdbcType=VARCHAR}, 
+      #{jdbcType,jdbcType=VARCHAR}, #{javaType,jdbcType=VARCHAR}, #{length,jdbcType=INTEGER}, 
+      #{primaryKey,jdbcType=BIT}, #{foreignKey,jdbcType=BIT}, #{comment,jdbcType=VARCHAR}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{tbId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertList" parameterType="java.util.List">
+    insert into table_field_info (id, field_name, field_zh_ch_name, 
+      jdbc_type, java_type, length, 
+      primary_key, foreign_key, comment, 
+      add_time, tb_id)
+    values 
+    <foreach collection="list" item="tab" separator=",">
+    (#{tab.id,jdbcType=VARCHAR}, #{tab.fieldName,jdbcType=VARCHAR}, #{tab.fieldZhChName,jdbcType=VARCHAR}, 
+      #{tab.jdbcType,jdbcType=VARCHAR}, #{tab.javaType,jdbcType=VARCHAR}, #{tab.length,jdbcType=INTEGER}, 
+      #{tab.primaryKey,jdbcType=BIT}, #{tab.foreignKey,jdbcType=BIT}, #{tab.comment,jdbcType=VARCHAR}, 
+      #{tab.addTime,jdbcType=TIMESTAMP}, #{tab.tbId,jdbcType=VARCHAR})
+     </foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xinyibi.pojo.TableFieldInfo">
+    insert into table_field_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="fieldName != null">
+        field_name,
+      </if>
+      <if test="fieldZhChName != null">
+        field_zh_ch_name,
+      </if>
+      <if test="jdbcType != null">
+        jdbc_type,
+      </if>
+      <if test="javaType != null">
+        java_type,
+      </if>
+      <if test="length != null">
+        length,
+      </if>
+      <if test="primaryKey != null">
+        primary_key,
+      </if>
+      <if test="foreignKey != null">
+        foreign_key,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="tbId != null">
+        tb_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldName != null">
+        #{fieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldZhChName != null">
+        #{fieldZhChName,jdbcType=VARCHAR},
+      </if>
+      <if test="jdbcType != null">
+        #{jdbcType,jdbcType=VARCHAR},
+      </if>
+      <if test="javaType != null">
+        #{javaType,jdbcType=VARCHAR},
+      </if>
+      <if test="length != null">
+        #{length,jdbcType=INTEGER},
+      </if>
+      <if test="primaryKey != null">
+        #{primaryKey,jdbcType=BIT},
+      </if>
+      <if test="foreignKey != null">
+        #{foreignKey,jdbcType=BIT},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tbId != null">
+        #{tbId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xinyibi.pojo.TableFieldInfoExample" resultType="java.lang.Long">
+    select count(*) from table_field_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update table_field_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fieldName != null">
+        field_name = #{record.fieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fieldZhChName != null">
+        field_zh_ch_name = #{record.fieldZhChName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jdbcType != null">
+        jdbc_type = #{record.jdbcType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.javaType != null">
+        java_type = #{record.javaType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.length != null">
+        length = #{record.length,jdbcType=INTEGER},
+      </if>
+      <if test="record.primaryKey != null">
+        primary_key = #{record.primaryKey,jdbcType=BIT},
+      </if>
+      <if test="record.foreignKey != null">
+        foreign_key = #{record.foreignKey,jdbcType=BIT},
+      </if>
+      <if test="record.comment != null">
+        comment = #{record.comment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addTime != null">
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.tbId != null">
+        tb_id = #{record.tbId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update table_field_info
+    set id = #{record.id,jdbcType=VARCHAR},
+      field_name = #{record.fieldName,jdbcType=VARCHAR},
+      field_zh_ch_name = #{record.fieldZhChName,jdbcType=VARCHAR},
+      jdbc_type = #{record.jdbcType,jdbcType=VARCHAR},
+      java_type = #{record.javaType,jdbcType=VARCHAR},
+      length = #{record.length,jdbcType=INTEGER},
+      primary_key = #{record.primaryKey,jdbcType=BIT},
+      foreign_key = #{record.foreignKey,jdbcType=BIT},
+      comment = #{record.comment,jdbcType=VARCHAR},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      tb_id = #{record.tbId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xinyibi.pojo.TableFieldInfo">
+    update table_field_info
+    <set>
+      <if test="fieldName != null">
+        field_name = #{fieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldZhChName != null">
+        field_zh_ch_name = #{fieldZhChName,jdbcType=VARCHAR},
+      </if>
+      <if test="jdbcType != null">
+        jdbc_type = #{jdbcType,jdbcType=VARCHAR},
+      </if>
+      <if test="javaType != null">
+        java_type = #{javaType,jdbcType=VARCHAR},
+      </if>
+      <if test="length != null">
+        length = #{length,jdbcType=INTEGER},
+      </if>
+      <if test="primaryKey != null">
+        primary_key = #{primaryKey,jdbcType=BIT},
+      </if>
+      <if test="foreignKey != null">
+        foreign_key = #{foreignKey,jdbcType=BIT},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tbId != null">
+        tb_id = #{tbId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xinyibi.pojo.TableFieldInfo">
+    update table_field_info
+    set field_name = #{fieldName,jdbcType=VARCHAR},
+      field_zh_ch_name = #{fieldZhChName,jdbcType=VARCHAR},
+      jdbc_type = #{jdbcType,jdbcType=VARCHAR},
+      java_type = #{javaType,jdbcType=VARCHAR},
+      length = #{length,jdbcType=INTEGER},
+      primary_key = #{primaryKey,jdbcType=BIT},
+      foreign_key = #{foreignKey,jdbcType=BIT},
+      comment = #{comment,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      tb_id = #{tbId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="findByViewId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT
+			tf.*
+		FROM
+			table_view tv
+		JOIN view_field vf ON tv.id = vf.view_id
+		JOIN view_field_item vfi ON vf.id = vfi.view_field_id
+		JOIN table_field_info tf ON vfi.table_field_id = tf.id
+		WHERE vt.id = #{id}
+  </select>
+  
+</mapper>

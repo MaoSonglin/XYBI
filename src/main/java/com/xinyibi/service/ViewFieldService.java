@@ -1,0 +1,88 @@
+package com.xinyibi.service;
+
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.xinyibi.exception.ServiceException;
+import com.xinyibi.mapper.TableFieldInfoMapper;
+import com.xinyibi.mapper.TableViewMapper;
+import com.xinyibi.mapper.ViewFieldItemMapper;
+import com.xinyibi.mapper.ViewFieldMapper;
+import com.xinyibi.pojo.TableFieldInfo;
+import com.xinyibi.pojo.TableView;
+import com.xinyibi.pojo.ViewField;
+import com.xinyibi.pojo.ViewFieldItem;
+import com.xinyibi.util.StrUtils;
+
+@Service
+public class ViewFieldService {
+
+	@Autowired
+	private ViewFieldMapper viewFieldMapper;
+	
+	@Autowired
+	private TableViewMapper tableViewMapper;
+	
+	@Autowired
+	private TableFieldInfoMapper tableFieldMapper;
+	
+	@Autowired
+	private ViewFieldItemMapper viewFieldItemMapper;
+	
+	/**
+	 * 在数据字段的基础之上新建视图字段
+	 * @param viewId		新建视图字段所属视图的ID
+	 * @param tableFieldId	数据字段ID
+	 * @return
+	 * @throws ServiceException 服务层异常
+	 */
+	@Transactional
+	public boolean createViewFieldByTableField(String viewId,String tableFieldId) throws ServiceException{
+//		String viewId = field.getViewId();
+		TableView tableView = tableViewMapper.selectByPrimaryKey(viewId);
+		if(tableView==null)  throw new ServiceException("数据视图不存在");//return Message.fail("数据视图ID不存在", viewId);
+		
+		TableFieldInfo tableFieldInfo = tableFieldMapper.selectByPrimaryKey(tableFieldId);
+		if(tableFieldInfo == null) new ServiceException("数据字段不存在");//return Message.fail("数据字段不存在", tableFieldId);
+		
+		// 新建视图字段
+		ViewField viewField = new ViewField();
+		viewField.setDataType(tableFieldInfo.getJdbcType());
+		viewField.setFieldName(tableFieldInfo.getFieldName());
+		viewField.setFieldZhChName(tableFieldInfo.getFieldZhChName());
+		viewField.setAddTime(new Date());
+		viewField.setViewId(tableView.getId());
+		viewField.setId(StrUtils.getNextId());
+		
+		// 视图字段项
+		ViewFieldItem item = new ViewFieldItem();
+		item.setId(StrUtils.getNextId());
+		item.setType("column");
+		item.setViewFieldId(viewField.getId());
+		item.setOrder(1);
+		item.setTableFieldId(tableFieldInfo.getId());
+		
+		// 保存
+		int insert = viewFieldMapper.insert(viewField);
+		int insert2 = viewFieldItemMapper.insert(item);
+		
+		return insert > 0 && insert2 > 0; 
+	}
+
+	
+	/**
+	 * 删除视图中的某个字段
+	 * @param viewFieldId
+	 * @return	删除成功返回true，否则返回false
+	 * @throws ServiceException	数据视图字段ID不存在
+	 */
+	@Transactional
+	public boolean dropViewField(String viewFieldId) throws ServiceException{
+		// TODO 如果没有任何图表引用该字段则成功，否则就失败
+		return false;
+	}
+	
+}

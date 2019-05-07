@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyibi.mapper.ViewPathHeaderMapper">
+  <resultMap id="BaseResultMap" type="com.xinyibi.pojo.ViewPathHeader">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="table_id" jdbcType="VARCHAR" property="tableId" />
+    <result column="view_id" jdbcType="VARCHAR" property="viewId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, table_id, view_id
+  </sql>
+  <select id="selectByExample" parameterType="com.xinyibi.pojo.ViewPathHeaderExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from view_path_header
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from view_path_header
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from view_path_header
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xinyibi.pojo.ViewPathHeaderExample">
+    delete from view_path_header
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xinyibi.pojo.ViewPathHeader">
+    insert into view_path_header (id, table_id, view_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{tableId,jdbcType=VARCHAR}, #{viewId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertList" parameterType="java.util.List">
+  	insert into view_path_header (id, table_id, view_id) values 
+    <foreach collection="list" item="item" separator=",">
+    	(#{item.id,jdbcType=BIGINT}, #{item.tableId,jdbcType=VARCHAR}, #{item.viewId,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xinyibi.pojo.ViewPathHeader">
+    insert into view_path_header
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tableId != null">
+        table_id,
+      </if>
+      <if test="viewId != null">
+        view_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tableId != null">
+        #{tableId,jdbcType=VARCHAR},
+      </if>
+      <if test="viewId != null">
+        #{viewId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xinyibi.pojo.ViewPathHeaderExample" resultType="java.lang.Long">
+    select count(*) from view_path_header
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update view_path_header
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.tableId != null">
+        table_id = #{record.tableId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.viewId != null">
+        view_id = #{record.viewId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update view_path_header
+    set id = #{record.id,jdbcType=BIGINT},
+      table_id = #{record.tableId,jdbcType=VARCHAR},
+      view_id = #{record.viewId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xinyibi.pojo.ViewPathHeader">
+    update view_path_header
+    <set>
+      <if test="tableId != null">
+        table_id = #{tableId,jdbcType=VARCHAR},
+      </if>
+      <if test="viewId != null">
+        view_id = #{viewId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xinyibi.pojo.ViewPathHeader">
+    update view_path_header
+    set table_id = #{tableId,jdbcType=VARCHAR},
+      view_id = #{viewId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+  <resultMap type="com.xinyibi.model.ViewGraphModel" id="ViewGraphMap">
+  	<id column="vh_id" property="id"/>
+  	<result column="vh_table_id" property="tableId"></result>
+  	<result column="vh_view_id" property="viewId"></result>
+  	<association property="from" javaType="com.xinyibi.pojo.DataTableInfo">
+  		<id column="dt1_id" property="id"/>
+  		<result column="dt1_table_name" property="table_name"/>
+  		<result column="dt1_table_zh_ch_name" property="tableZhChName"/>
+  		<result column="dt1_type" property="type"/>
+  		<result column="dt1_add_time" property="addTime"/>
+  		<result column="dt1_db_id" property="db_id"/>
+  	</association>
+  	<collection property="joins" javaType="com.xinyibi.model.PathVertexModel">
+		<id column="vp_id" property="id"></id>  	
+		<result column="vp_table_id" property="tableId"/>
+		<result column="vp_left_field_id" property="leftFieldId"/>
+		<result column="vp_right_field_id" property="rightFieldId"/>
+		<result column="vp_header_id" property="headerId"/>
+		<association property="table" javaType="com.xinyibi.pojo.DataTableInfo">
+			<id column="dt2_id" property="id"/>
+	  		<result column="dt2_table_name" property="table_name"/>
+	  		<result column="dt2_table_zh_ch_name" property="tableZhChName"/>
+	  		<result column="dt2_type" property="type"/>
+	  		<result column="dt2_add_time" property="addTime"/>
+	  		<result column="dt2_db_id" property="db_id"/>
+		</association>
+		<association property="leftField" javaType="com.xinyibi.pojo.TableFieldInfo">
+			<id column="tf1_id" property="id"/>
+			<result column="tf1_field_name" property="fieldName"/>
+			<result column="tf1_field_zh_ch_name" property="fieldZhChName"/>
+			<result column="tf1_jdbc_type" property="jdbcType"/>
+			<result column="tf1_java_type" property="javaType"/>
+			<result column="tf1_length" property="length"/>
+			<result column="tf1_primary_key" property="primaryKey"/>
+			<result column="tf1_desc" property="comment"/>
+			<result column="tf1_add_time" property="addTime"/>
+			<result column="tf1_tb_id" property="tbId"/>
+		</association>
+		<association property="rightField" javaType="com.xinyibi.pojo.TableFieldInfo">
+			<id column="tf2_id" property="id"/>
+			<result column="tf2_field_name" property="fieldName"/>
+			<result column="tf2_field_zh_ch_name" property="fieldZhChName"/>
+			<result column="tf2_jdbc_type" property="jdbcType"/>
+			<result column="tf2_java_type" property="javaType"/>
+			<result column="tf2_length" property="length"/>
+			<result column="tf2_primary_key" property="primaryKey"/>
+			<result column="tf2_desc" property="comment"/>
+			<result column="tf2_add_time" property="addTime"/>
+			<result column="tf2_tb_id" property="tbId"/>
+		</association>
+  	</collection>
+  </resultMap>
+  <sql id="ViewGraphSelectList">
+  SELECT
+		vh.id 												vh_id,
+		vh.table_id 									vh_table_id,
+		vh.view_id 										vh_view_id,
+		dt1.id												dt1_id,
+		dt1.table_name								dt1_table_name,
+		dt1.table_zh_ch_name					dt1_table_zh_ch_name,
+		dt1.type											dt1_type,
+		dt1.add_time									dt1_add_time,
+		dt1.db_id											dt1_db_id,
+	  	vp.id 												vp_id,
+		vp.table_id 									vp_table_id,
+		vp.left_field_id 							vp_left_field_id,
+		vp.right_field_id 						vp_right_field_id,
+		vp.header_id 									vp_header_id,
+		dt2.id												dt2_id,
+		dt2.table_name								dt2_table_name,
+		dt2.table_zh_ch_name					dt2_table_zh_ch_name,
+		dt2.type											dt2_type,
+		dt2.add_time									dt2_add_time,
+		dt2.db_id											dt2_db_id,
+		tf1.id												tf1_id,
+		tf1.field_name								tf1_field_name,
+		tf1.field_zh_ch_name					tf1_field_zh_ch_name,
+		tf1.jdbc_type									tf1_jdbc_type,
+		tf1.java_type									tf1_java_type,
+		tf1.length										tf1_length,
+		tf1.primary_key								tf1_primary_key,
+		tf1.foreign_key								tf1_foreign_key,
+		tf1.`comment`									tf1_desc,
+		tf1.add_time									tf1_add_time,
+		tf1.tb_id											tf1_tb_id,
+		tf2.id												tf2_id,
+		tf2.field_name								tf2_field_name,
+		tf2.field_zh_ch_name					tf2_field_zh_ch_name,
+		tf2.jdbc_type									tf2_jdbc_type,
+		tf2.java_type									tf2_java_type,
+		tf2.length										tf2_length,
+		tf2.primary_key								tf2_primary_key,
+		tf2.foreign_key								tf2_foreign_key,
+		tf2.`comment`									tf2_desc,
+		tf2.add_time									tf2_add_time,
+		tf2.tb_id											tf2_tb_id
+	FROM
+		view_path_header vh
+	JOIN view_path_vertex vp ON vh.id = vp.header_id
+	JOIN data_table_info dt1 ON vh.table_id = dt1.id
+	JOIN data_table_info dt2 ON vp.table_id = dt2.id
+	JOIN table_field_info tf1 ON tf1.id = vp.left_field_id
+	JOIN table_field_info tf2 ON tf2.id = vp.right_field_id
+  </sql>
+  <select id="findViewGraphByViewId" parameterType="java.lang.String" resultMap="ViewGraphMap">
+  	<include refid="ViewGraphSelectList"></include>
+	WHERE vh.id = #{id}
+  </select>
+  
+</mapper>

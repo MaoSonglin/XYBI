@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyibi.mapper.ViewPathVertexMapper">
+  <resultMap id="BaseResultMap" type="com.xinyibi.pojo.ViewPathVertex">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="table_id" jdbcType="VARCHAR" property="tableId" />
+    <result column="left_field_id" jdbcType="VARCHAR" property="leftFieldId" />
+    <result column="right_field_id" jdbcType="VARCHAR" property="rightFieldId" />
+    <result column="header_id" jdbcType="BIGINT" property="headerId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, table_id, left_field_id, right_field_id, header_id
+  </sql>
+  <select id="selectByExample" parameterType="com.xinyibi.pojo.ViewPathVertexExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from view_path_vertex
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from view_path_vertex
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from view_path_vertex
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xinyibi.pojo.ViewPathVertexExample">
+    delete from view_path_vertex
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xinyibi.pojo.ViewPathVertex">
+    insert into view_path_vertex (id, table_id, left_field_id, 
+      right_field_id, header_id)
+    values (#{id,jdbcType=BIGINT}, #{tableId,jdbcType=VARCHAR}, #{leftFieldId,jdbcType=VARCHAR}, 
+      #{rightFieldId,jdbcType=VARCHAR}, #{headerId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xinyibi.pojo.ViewPathVertex">
+    insert into view_path_vertex
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tableId != null">
+        table_id,
+      </if>
+      <if test="leftFieldId != null">
+        left_field_id,
+      </if>
+      <if test="rightFieldId != null">
+        right_field_id,
+      </if>
+      <if test="headerId != null">
+        header_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tableId != null">
+        #{tableId,jdbcType=VARCHAR},
+      </if>
+      <if test="leftFieldId != null">
+        #{leftFieldId,jdbcType=VARCHAR},
+      </if>
+      <if test="rightFieldId != null">
+        #{rightFieldId,jdbcType=VARCHAR},
+      </if>
+      <if test="headerId != null">
+        #{headerId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xinyibi.pojo.ViewPathVertexExample" resultType="java.lang.Long">
+    select count(*) from view_path_vertex
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update view_path_vertex
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.tableId != null">
+        table_id = #{record.tableId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.leftFieldId != null">
+        left_field_id = #{record.leftFieldId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rightFieldId != null">
+        right_field_id = #{record.rightFieldId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.headerId != null">
+        header_id = #{record.headerId,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update view_path_vertex
+    set id = #{record.id,jdbcType=BIGINT},
+      table_id = #{record.tableId,jdbcType=VARCHAR},
+      left_field_id = #{record.leftFieldId,jdbcType=VARCHAR},
+      right_field_id = #{record.rightFieldId,jdbcType=VARCHAR},
+      header_id = #{record.headerId,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xinyibi.pojo.ViewPathVertex">
+    update view_path_vertex
+    <set>
+      <if test="tableId != null">
+        table_id = #{tableId,jdbcType=VARCHAR},
+      </if>
+      <if test="leftFieldId != null">
+        left_field_id = #{leftFieldId,jdbcType=VARCHAR},
+      </if>
+      <if test="rightFieldId != null">
+        right_field_id = #{rightFieldId,jdbcType=VARCHAR},
+      </if>
+      <if test="headerId != null">
+        header_id = #{headerId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xinyibi.pojo.ViewPathVertex">
+    update view_path_vertex
+    set table_id = #{tableId,jdbcType=VARCHAR},
+      left_field_id = #{leftFieldId,jdbcType=VARCHAR},
+      right_field_id = #{rightFieldId,jdbcType=VARCHAR},
+      header_id = #{headerId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</mapper>
