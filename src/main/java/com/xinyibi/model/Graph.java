@@ -9,22 +9,40 @@ import com.xinyibi.model.Vertex.Arc;
 import lombok.Data;
 
 
+/**
+ * @author MaoSonglin
+ * 图的数据结构，使用十字链表表示法
+ */
 @Data
 public class Graph {
 	
-	
+	/**
+	 * 顶点表
+	 */
 	private List<Vertex> vertexs = new ArrayList<>();
 	
+	/**
+	 * 或者图中顶点的个数
+	 * @return
+	 */
 	public int count() {
 		return vertexs.size();
 	}
-	
+	/**
+	 * 向图中添加定点，定点的数据域存放的值为value
+	 * @param value
+	 */
 	public void addVertex(String value) {
 		Vertex vertex = new Vertex();
 		vertex.setData(value);
 		vertexs.add(vertex);
 	}
 	
+	/**
+	 * 定位value在的定点表中的位置
+	 * @param value
+	 * @return 如果value存在于某个定点的数据域中，则返回这个定点在定点表中的下标，否则返回-1
+	 */
 	public int indexOf(String value) {
 		int index = -1;
 		for (Vertex vertex : vertexs) {
@@ -35,7 +53,12 @@ public class Graph {
 		}
 		return index;
 	}
-	
+	/**
+	 * 返回指定下标的两个顶点之间的弧长
+	 * @param v		弧尾顶点在顶点表中的下标
+	 * @param v2	弧头顶点在定点表中的下标
+	 * @return	如果两个顶点之间存在至少一条弧，则返回该弧的长度，否则返回10000表示这两个顶点之间不可达
+	 */
 	public int getWeight(int v, int v2) {
 		Vertex vertex = vertexs.get(v);
 		List<Arc> arcs = vertex.getArcs();
@@ -79,15 +102,31 @@ public class Graph {
 		return -1;
 	}
 	
+	/**
+	 * 指定值得顶点的第一个邻接点的下标
+	 * @param value
+	 * @return
+	 */
 	public int firstAdjacency(String value) {
 		int indexOf = indexOf(value);
 		return firstAdjacency(indexOf);
 	}
+	/**
+	 * 向图中添加一条弧
+	 * @param v1	弧头顶点的数据域值
+	 * @param v2	弧尾顶点的数据域值
+	 */
 	public void addArc(String v1,String v2) {
 		addArc(v1,v2,10000);
 	}
 	
 	
+	/**
+	 * 向图中插入一条弧
+	 * @param v1	弧头顶点值
+	 * @param v2	弧尾顶点值
+	 * @param weight	弧长
+	 */
 	public void addArc(String v1,String v2,int weight) {
 		int index = indexOf(v1);
 		int index2 = indexOf(v2);
