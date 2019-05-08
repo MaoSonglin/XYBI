@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.xinyibi.model.GraphStruct;
+import com.xinyibi.model.Graph;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Djiestra {
 
 	public static void main(String[] args) throws JsonProcessingException {
-		GraphStruct graph = new GraphStruct();
+		Graph graph = new Graph();
 		for(int i = 1; i <= 4; i++)
 		graph.addVertex("t"+i);
 		
@@ -28,7 +28,7 @@ public class Djiestra {
 		System.out.println(new Djiestra().getPath("t4",graph));
 	}
 	
-	public List<List<String>> getPath(String table,GraphStruct g){
+	public List<List<String>> getPath(String table,Graph g){
 		int indexOf = g.indexOf(table);	// 数据表的下标
 		if(indexOf == -1) throw new IllegalArgumentException(table);
 		// 存放所求节点到其他节点的最短路径上的前驱节点的下标
