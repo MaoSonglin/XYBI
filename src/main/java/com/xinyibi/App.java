@@ -47,6 +47,7 @@ public class App implements WebMvcConfigurer,ApplicationContextAware
 			try(Connection conn2 = ds.getConnection()){
 				String propter = context.getBean(Environment.class).getProperty("database.init.script","xinyibi-sqlite.sql");
 				ClassPathResource classPathResource = new ClassPathResource(propter) ;
+
 				EncodedResource encodedResource = new EncodedResource(classPathResource,"UTF-8");
 				ScriptUtils.executeSqlScript(conn2, encodedResource);
 			} catch (SQLException e1) {
