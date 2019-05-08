@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
@@ -44,7 +45,8 @@ public class App implements WebMvcConfigurer,ApplicationContextAware
 			}
 		} catch (Exception e) {
 			try(Connection conn2 = ds.getConnection()){
-				ClassPathResource classPathResource = new ClassPathResource("xinyibi.sql");
+				String propter = context.getBean(Environment.class).getProperty("database.init.script","xinyibi-sqlite.sql");
+				ClassPathResource classPathResource = new ClassPathResource(propter) ;
 				EncodedResource encodedResource = new EncodedResource(classPathResource,"UTF-8");
 				ScriptUtils.executeSqlScript(conn2, encodedResource);
 			} catch (SQLException e1) {

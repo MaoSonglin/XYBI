@@ -9,7 +9,6 @@
     <result column="table_field_id" jdbcType="VARCHAR" property="tableFieldId" />
     <result column="view_field_id" jdbcType="BIGINT" property="viewFieldId" />
   </resultMap>
-  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -91,7 +90,7 @@
     from view_field_item
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="selectByViewId" parameterType="java.lang.Long" parameterMap="BaseResultMap">
+  <select id="selectByViewId" parameterType="java.lang.Long" resultMap="BaseResultMap">
   	select 
     f.id, f.content, f.type, f.order, f.table_field_id, f.view_field_id
     from view_field_item f join view_field v on v.id = f.view_field_id
@@ -243,4 +242,5 @@
       view_field_id = #{viewFieldId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
 </mapper>

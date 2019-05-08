@@ -46,9 +46,9 @@
 		<table tableName="table_field_info"></table>
 		<table tableName="table_view"></table> -->
 <!-- 		<table tableName="view_field"></table> -->
-<!-- 		<table tableName="view_field_item"></table> -->
+		<table tableName="view_field_item"></table>
 <!-- 		<table tableName="view_vertex"></table> -->
-		<table tableName="person" ></table>
+<!-- 		<table tableName="person" ></table> -->
 <!-- 		<table tableName="view_path_vertex"></table> -->
   </context>
 </generatorConfiguration>

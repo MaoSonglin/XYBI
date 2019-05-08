@@ -231,6 +231,38 @@ public class DataViewService implements Serializable {
 	
 	
 	public Object selectFromView(String viewId, PageEntry pageEntry) throws ServiceException{
+		getGraphInfo(viewId);
+		return null;// TODO
+	/*	
+		if(databases.size() == 1){
+			StringBuffer sBuffer = new StringBuffer();
+			
+			selectList(tableFieldInfos, sBuffer);
+			
+			addFrom(graph, sBuffer);
+			// 表的连接条件
+			addWhere(graph, sBuffer);
+			
+			String sql = sBuffer.toString();
+			log.debug(sql);
+			DatabaseInfo databaseInfo = databases.get(0);
+			FileInfo fileInfo = context.getBean(FileInfoMapper.class).selectByPrimaryKey(databaseInfo.getDriverFileId());
+			String path = fileInfo.getPath();
+			try {
+				// 加载数据库驱动程序
+				DriverUtil.loadDriverClass(databaseInfo.getDriverClassName(), path);
+				return executeQuery(sql, databaseInfo, tableFieldInfos);
+			} catch (ClassNotFoundException | IOException | SQLException e) {
+				throw new ServiceException(e);
+			}
+		}else{
+			throw new ServiceException("目前不支持非同源数据库的查询操作");
+		}
+		*/
+	}
+
+
+	public ViewDetailModel getGraphInfo(String viewId) throws ServiceException {
 		// 查找视图
 		TableView view = tvMapper.selectByPrimaryKey(viewId);
 		if(view == null) throw new ServiceException("视图ID不存在");
@@ -263,31 +295,7 @@ public class DataViewService implements Serializable {
 		List<ViewGraphModel> graph = vphMapper.findViewGraphByViewId(viewId);
 		model.setGraph(graph);
 		
-		if(databases.size() == 1){
-			StringBuffer sBuffer = new StringBuffer();
-			
-			selectList(tableFieldInfos, sBuffer);
-			
-			addFrom(graph, sBuffer);
-			// 表的连接条件
-			addWhere(graph, sBuffer);
-			
-			String sql = sBuffer.toString();
-			log.debug(sql);
-			DatabaseInfo databaseInfo = databases.get(0);
-			FileInfo fileInfo = context.getBean(FileInfoMapper.class).selectByPrimaryKey(databaseInfo.getDriverFileId());
-			String path = fileInfo.getPath();
-			try {
-				// 加载数据库驱动程序
-				DriverUtil.loadDriverClass(databaseInfo.getDriverClassName(), path);
-				return executeQuery(sql, databaseInfo, tableFieldInfos);
-			} catch (ClassNotFoundException | IOException | SQLException e) {
-				throw new ServiceException(e);
-			}
-		}else{
-			throw new ServiceException("目前不支持非同源数据库的查询操作");
-		}
-		
+		return model;
 	}
 
 
