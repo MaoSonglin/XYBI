@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xinyibi.model.Vertex.Arc;
 
 import lombok.Data;
@@ -16,6 +18,17 @@ import lombok.Data;
 @Data
 public class Graph {
 	
+	public static void main(String[] args) throws JsonProcessingException {
+		Graph graph = new Graph();
+		for (int i = 0; i < 10; i++) {
+			graph.addVertex("t"+i);
+		}
+		graph.addArc("t1", "t2");
+		graph.addArc("t2", "t1");
+		graph.addArc("t0", "t0");
+		String writeValueAsString = new ObjectMapper().writeValueAsString(graph);
+		System.out.println(writeValueAsString);
+	}
 	/**
 	 * 顶点表
 	 */
@@ -130,6 +143,8 @@ public class Graph {
 	public void addArc(String v1,String v2,int weight) {
 		int index = indexOf(v1);
 		int index2 = indexOf(v2);
+		if(index == index2)
+			throw new IllegalArgumentException("弧头和弧尾不能相同.....");
 		if(index > -1 && index2 > -1) {
 			Arc arc = new Arc();
 			arc.setAdj(index2);
@@ -142,7 +157,7 @@ public class Graph {
 			arc2.setAdj(index);
 			arc2.setWeight(weight);
 			List<Arc> arcs2 = vertexs.get(index2).getArcs();
-			if(!arcs.contains(arc2))
+			if(!arcs2.contains(arc2))
 				arcs2.add(arc2);
 		}else {
 			throw new IllegalArgumentException("不存在的点");
