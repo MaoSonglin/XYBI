@@ -44,7 +44,7 @@ public class App implements WebMvcConfigurer,ApplicationContextAware
 			}
 		} catch (Exception e) {
 			try(Connection conn2 = ds.getConnection()){
-				ClassPathResource classPathResource = new ClassPathResource("xinyibi.sql");
+				ClassPathResource classPathResource = new ClassPathResource("xinyibi-sqlite.sql");
 				EncodedResource encodedResource = new EncodedResource(classPathResource,"UTF-8");
 				ScriptUtils.executeSqlScript(conn2, encodedResource);
 			} catch (SQLException e1) {

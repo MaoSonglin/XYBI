@@ -167,11 +167,6 @@ CREATE TABLE `role` (
   `add_time` int(11) DEFAULT NULL,
   `comment` varchar(255) DEFAULT NULL);
 
--- ----------------------------
--- Table structure for sqlite_sequence
--- ----------------------------
-DROP TABLE IF EXISTS "main"."sqlite_sequence";
-CREATE TABLE sqlite_sequence(name,seq);
 
 -- ----------------------------
 -- Table structure for table_field_info
