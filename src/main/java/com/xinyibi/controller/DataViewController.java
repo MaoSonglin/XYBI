@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xinyibi.exception.ServiceException;
+import com.xinyibi.exception.UnreachableException;
 import com.xinyibi.pojo.TableView;
 import com.xinyibi.service.DataViewService;
 import com.xinyibi.vo.CreateViewVo;
@@ -41,6 +42,26 @@ public class DataViewController implements Serializable{
 		}
 		
 		return dataViewService.createView(viewVo);
+	}
+	
+	/**
+	 * 为数据视图添加一个新的字段，该字段的id为数据字段的fieldid
+	 * @param viewId
+	 * @param fieldId
+	 * @return
+	 */
+	@RequestMapping("/add/field")
+	public @ResponseBody Object addViewField(String viewId,String fieldId){
+		try {
+			dataViewService.addViewField(viewId,fieldId);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+			return Message.error(e.getMessage(),null);
+		} catch (UnreachableException e) {
+			e.printStackTrace();
+			
+		}
+		return null;
 	}
 	
 	@RequestMapping("/update")

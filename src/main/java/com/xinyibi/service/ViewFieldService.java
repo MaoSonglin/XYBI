@@ -17,7 +17,6 @@ import com.xinyibi.mapper.TableViewMapper;
 import com.xinyibi.mapper.ViewFieldItemMapper;
 import com.xinyibi.mapper.ViewFieldMapper;
 import com.xinyibi.model.ViewDetailModel;
-import com.xinyibi.model.ViewGraphModel;
 import com.xinyibi.pojo.DataTableInfo;
 import com.xinyibi.pojo.ForeignKeyInfo;
 import com.xinyibi.pojo.ForeignKeyInfoExample;
@@ -31,6 +30,7 @@ import com.xinyibi.pojo.ViewPathVertex;
 import com.xinyibi.util.StrUtils;
 
 @Service
+@SuppressWarnings("unused")
 public class ViewFieldService {
 
 	@Autowired
@@ -61,6 +61,7 @@ public class ViewFieldService {
 	 * @return
 	 * @throws ServiceException 服务层异常
 	 */
+	@Deprecated
 	@Transactional
 	public boolean createViewFieldByTableField(String viewId,String tableFieldId) throws ServiceException{
 //		String viewId = field.getViewId();
@@ -82,13 +83,6 @@ public class ViewFieldService {
 		String tableFieldTbId = tableFieldInfo.getTbId();
 
 		DataTableInfo orElse = tables.stream().peek(table->table.getId().equals(tableFieldTbId)).findFirst().orElse(null);
-		
-		if(orElse == null){
-			createPath(tables, tableFieldTbId);
-//			foreignKeyInfoExample.createCriteria().andRefTbIdEqualTo(tableFieldTbId);
-			
-			
-		}
 		
 		// 保存
 		int insert = viewFieldMapper.insert(viewField);
@@ -123,23 +117,7 @@ public class ViewFieldService {
 	}
 
 
-	protected void createPath(List<DataTableInfo> tables, String tableFieldTbId) {
-		ForeignKeyInfoExample foreignKeyInfoExample = new ForeignKeyInfoExample();
-		foreignKeyInfoExample.createCriteria().andTbIdEqualTo(tableFieldTbId);
-		List<ForeignKeyInfo> list = foreignKeyInfoMapper.selectByExample(foreignKeyInfoExample);
-		for (ForeignKeyInfo foreignKeyInfo : list) {
-			String refTbId = foreignKeyInfo.getRefTbId();
-			DataTableInfo refTable = tables.stream().peek(table->table.getId().equals(tableFieldTbId)).findFirst().orElse(null);
-			if(refTable != null){
-				
-			}else{
-				createPath(tables,refTbId);
-				ViewPathVertex viewPathVertex = new ViewPathVertex();
-				
-			}
-		}
-	}
-
+	
 	public void addTableFieldInfo(String viewId,String fieldId) throws ServiceException{
 		ViewDetailModel model = dataViewService.getGraphInfo(viewId);
 		// 关联的表

@@ -46,6 +46,7 @@ public class Graph {
 	 * @param value
 	 */
 	public void addVertex(String value) {
+		if(indexOf(value) > -1) return;
 		Vertex vertex = new Vertex();
 		vertex.setData(value);
 		vertexs.add(vertex);

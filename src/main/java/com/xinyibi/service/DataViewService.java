@@ -1,14 +1,9 @@
 package com.xinyibi.service;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,25 +15,30 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.tsc9526.monalisa.core.query.datatable.DataMap;
+import com.tsc9526.monalisa.core.query.datatable.DataTable;
+import com.xinyibi.adapter.ViewAdapter;
+import com.xinyibi.exception.NoSuchVertexException;
 import com.xinyibi.exception.ServiceException;
+import com.xinyibi.exception.UnreachableException;
 import com.xinyibi.mapper.DataSetMapper;
 import com.xinyibi.mapper.DataTableInfoMapper;
 import com.xinyibi.mapper.DatabaseInfoMapper;
-import com.xinyibi.mapper.FileInfoMapper;
+import com.xinyibi.mapper.ForeignKeyInfoMapper;
 import com.xinyibi.mapper.TableFieldInfoMapper;
 import com.xinyibi.mapper.TableViewMapper;
 import com.xinyibi.mapper.ViewFieldItemMapper;
 import com.xinyibi.mapper.ViewFieldMapper;
 import com.xinyibi.mapper.ViewPathHeaderMapper;
-import com.xinyibi.model.DataContainer;
-import com.xinyibi.model.DataContainer.Row;
-import com.xinyibi.model.PathVertexModel;
+import com.xinyibi.model.Graph;
 import com.xinyibi.model.ViewDetailModel;
 import com.xinyibi.model.ViewGraphModel;
 import com.xinyibi.pojo.DataSetExample;
 import com.xinyibi.pojo.DataTableInfo;
+import com.xinyibi.pojo.DataTableInfoExample;
 import com.xinyibi.pojo.DatabaseInfo;
-import com.xinyibi.pojo.FileInfo;
+import com.xinyibi.pojo.ForeignKeyInfo;
+import com.xinyibi.pojo.ForeignKeyInfoExample;
 import com.xinyibi.pojo.TableFieldInfo;
 import com.xinyibi.pojo.TableFieldInfoExample;
 import com.xinyibi.pojo.TableView;
@@ -49,7 +49,7 @@ import com.xinyibi.pojo.ViewFieldExample;
 import com.xinyibi.pojo.ViewFieldItem;
 import com.xinyibi.pojo.ViewFieldItemExample;
 import com.xinyibi.pojo.ViewPathHeader;
-import com.xinyibi.util.DriverUtil;
+import com.xinyibi.util.Accessibility;
 import com.xinyibi.util.StrUtils;
 import com.xinyibi.vo.CreateViewVo;
 import com.xinyibi.vo.Message;
@@ -64,7 +64,33 @@ public class DataViewService implements Serializable {
 
 	private static final long serialVersionUID = -7276116476495305650L;
 	
+	@Autowired
+	private ApplicationContext context;
 	
+	@Autowired
+	private DataTableInfoMapper tbMapper;
+	
+	@Autowired
+	private DataSetMapper dataSetMapper;
+	
+	@Autowired
+	private TableFieldInfoMapper tfMapper;
+	
+	@Autowired
+	private TableViewMapper tvMapper;
+	
+	@Autowired
+	private ViewFieldMapper vfMapper;
+	
+	@Autowired
+	private ViewFieldItemMapper vfiMapper;
+	
+	@Autowired
+	private ViewPathHeaderMapper vphMapper;
+
+	@Autowired
+	private ForeignKeyInfoMapper foreignKeyInfoMapper;
+
 
 	/**
 	 * 在数据表的基础之上新建视图
@@ -144,9 +170,9 @@ public class DataViewService implements Serializable {
 		int insertList  = tvMapper.insertList(views);
 		int insertList2 = vfMapper.insertList(viewFields);
 		int insertList3 = vfiMapper.insertList(viewFieldItems);
-		int insertList4 = vphMapper.insertList(paths);
+//		int insertList4 = vphMapper.insertList(paths);
 		
-		if(insertList>0&&insertList2>0&&insertList3>0 && insertList4>0){
+		if(insertList>0&&insertList2>0&&insertList3>0 /*&& insertList4>0*/){
 			return Message.success("添加成功", views);
 		}else{
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -162,6 +188,7 @@ public class DataViewService implements Serializable {
 	 * @return
 	 * @throws ServiceException 
 	 */
+	@Transactional
 	public boolean dropView(String viewId) throws ServiceException{
 		// 检查视图是否存在
 		TableView view = tvMapper.selectByPrimaryKey(viewId);
@@ -190,6 +217,7 @@ public class DataViewService implements Serializable {
 	 * @param view	待修改的视图
 	 * @return		修改成功返回true否则返回false
 	 */
+	@Transactional
 	public boolean updateView(TableView view){
 		boolean flag = tvMapper.updateByPrimaryKeySelective(view)>0;
 		return flag;
@@ -230,35 +258,11 @@ public class DataViewService implements Serializable {
 	}
 	
 	
-	public Object selectFromView(String viewId, PageEntry pageEntry) throws ServiceException{
-		getGraphInfo(viewId);
+	public DataTable<DataMap> selectFromView(String viewId, PageEntry pageEntry) throws ServiceException{
+		ViewDetailModel model = getGraphInfo(viewId);
+		List<DatabaseInfo> databases = model.getDatabases();
+		
 		return null;// TODO
-	/*	
-		if(databases.size() == 1){
-			StringBuffer sBuffer = new StringBuffer();
-			
-			selectList(tableFieldInfos, sBuffer);
-			
-			addFrom(graph, sBuffer);
-			// 表的连接条件
-			addWhere(graph, sBuffer);
-			
-			String sql = sBuffer.toString();
-			log.debug(sql);
-			DatabaseInfo databaseInfo = databases.get(0);
-			FileInfo fileInfo = context.getBean(FileInfoMapper.class).selectByPrimaryKey(databaseInfo.getDriverFileId());
-			String path = fileInfo.getPath();
-			try {
-				// 加载数据库驱动程序
-				DriverUtil.loadDriverClass(databaseInfo.getDriverClassName(), path);
-				return executeQuery(sql, databaseInfo, tableFieldInfos);
-			} catch (ClassNotFoundException | IOException | SQLException e) {
-				throw new ServiceException(e);
-			}
-		}else{
-			throw new ServiceException("目前不支持非同源数据库的查询操作");
-		}
-		*/
 	}
 
 
@@ -298,92 +302,128 @@ public class DataViewService implements Serializable {
 		return model;
 	}
 
+	
 
-	// 执行SQL语句
-	protected Object executeQuery(String sql, DatabaseInfo databaseInfo, List<TableFieldInfo> tableFieldInfos)
-			throws SQLException { 
-		String url = databaseInfo.getUrl();
-		String uname = databaseInfo.getUname();
-		String upwd = databaseInfo.getUpwd();
+	/**
+	 * 在ID为viewid的视图上添加一个id为fieldId的数据字段
+	 * @param viewId
+	 * @param fieldId
+	 * @return	添加成功返回true，否则返回false
+	 * @throws UnreachableException 
+	 * @throws 如果视图不存在，或者字段不存在
+	 */
+	@Transactional
+	public boolean addViewField(String viewId, String fieldId) throws ServiceException, UnreachableException {
 		
-		try(Connection conn = DriverManager.getConnection(url,uname,upwd);
-				PreparedStatement ps = conn.prepareStatement(sql);
-				ResultSet rs = ps.executeQuery()){
-			DataContainer<Object> container = new DataContainer<>();
-			
-			while(rs.next()){
-				Row<Object> row = container.newRow();
-				
-				for(TableFieldInfo tableFieldInfo : tableFieldInfos){
-					Object value = rs.getObject(tableFieldInfo.getId());
-					row.put(tableFieldInfo.getFieldName(), value);
+		TableView view = tvMapper.selectByPrimaryKey(viewId);
+		if(view == null) throw new ServiceException("视图不存在");
+		
+		TableFieldInfo fieldInfo = tfMapper.selectByPrimaryKey(fieldId);
+		if(fieldInfo == null) throw new ServiceException("字段不存在");
+		
+		ViewField viewField = new ViewField();
+		viewField.setAddTime(new Date());
+		viewField.setDataType(fieldInfo.getJavaType());
+		viewField.setFieldName(fieldInfo.getFieldName());
+		viewField.setFieldZhChName(fieldInfo.getFieldZhChName());
+		viewField.setViewId(viewId);
+		viewField.setId(StrUtils.getNextId());
+		
+		ViewFieldItem item = new ViewFieldItem();
+		item.setId(StrUtils.getNextId());
+		item.setType("column");
+		item.setViewFieldId(viewField.getId());
+		item.setOrder(1);
+		item.setTableFieldId(fieldInfo.getId());
+		
+		List<ViewFieldItem> items = new ArrayList<>();
+		viewField.setItems(items);
+		
+		// 获取视图view中包含的数据表
+		List<DataTableInfo> datatables = tbMapper.findByViewId(viewId);
+		if(datatables.isEmpty()){
+			log.debug("ID为%s的数据视图没有引用任何数据表...",viewId);
+			return save(viewField, item);
+		}
+		else{
+			Iterator<DataTableInfo> iter = datatables.stream().filter(datatable->datatable.getId().equals(fieldInfo.getId())).iterator();
+			if(iter.hasNext()){
+				// 数据字段fieldInfo存在于与视图view相关的某张表中
+				// 直接添加
+				log.debug("ID为'%s'的字段所在的数据表已经与视图关联....",fieldId);
+				return save(viewField,item);
+			}else{
+				log.debug("ID为'%s'的字段所在的数据表没有与视图关联....",fieldId);
+				// 不存在
+				boolean f = isAccess(fieldInfo, datatables);
+				if(f){
+					return save(viewField,item);
+				}else{
+					UnreachableException exception = new UnreachableException(String.format("ID为'%s'的字段所在的数据表与ID为'%s'的视图关联的数据表之间没有关联关系", fieldId,viewId));
+					throw exception;
 				}
 			}
-			return container;
 		}
+		
 	}
 
 
-	protected void addWhere(List<ViewGraphModel> graph, StringBuffer sBuffer) {
-		sBuffer.append(" where 1=1 ");
-		for (ViewGraphModel model : graph) {
-			List<PathVertexModel> joins = model.getJoins();
-			for (PathVertexModel pathVertexModel : joins) {
-				sBuffer.append(" and ").append(on(pathVertexModel.getLeftField())).append(" = ").append(on(pathVertexModel.getRightField()));
+	private boolean save(ViewField viewField, ViewFieldItem item) throws ServiceException {
+		int insert = this.vfMapper.insert(viewField);
+		int insert2 = this.vfiMapper.insert(item);
+		if(insert > 0 && insert2 > 0){
+			log.debug("新建字段成功");
+			return true;
+		}
+		throw new ServiceException("写入数据库异常");
+	}
+
+
+	/**
+	 * 检测数据字段fieldInfo与数据表datatables之间是否有关联
+	 * @param fieldInfo
+	 * @param datatables
+	 * @return
+	 * @throws ServiceException
+	 */
+	protected boolean isAccess(TableFieldInfo fieldInfo, List<DataTableInfo> datatables) throws ServiceException {
+		// 数据字段所属的数据表
+		DataTableInfo datatable = tbMapper.selectByPrimaryKey(fieldInfo.getTbId());
+
+		// 数据表DataTable在同一数据库中的表和view引用的数据表所在的数据表
+		DataTableInfoExample datatableExample = new DataTableInfoExample();
+		datatableExample.createCriteria().andDbIdEqualTo(datatable.getDbId());
+		datatableExample.createCriteria().andDbIdIn(datatables.stream().map(tbl->tbl.getDbId()).distinct().collect(Collectors.toList()));
+		List<DataTableInfo> alltables = tbMapper.selectByExample(datatableExample);
+		
+		if(alltables.stream().anyMatch(table->table.getId().equals(datatable.getId()))) return true;
+		
+		// 数据库中所有的外键
+		ForeignKeyInfoExample example = new ForeignKeyInfoExample();
+		List<String> collect = alltables.stream().map(tbl->tbl.getId()).distinct().collect(Collectors.toList());
+		example.createCriteria().andTbIdIn(collect);
+		example.createCriteria().andRefTbIdIn(collect);
+		List<ForeignKeyInfo> foreignKeys = foreignKeyInfoMapper.selectByExample(example);
+		
+		// 用外键和表构建一张图
+		Graph graph = new Graph();
+		graph.addVertex(datatable.getId());
+		alltables.forEach(dt->graph.addVertex(dt.getId()));
+		foreignKeys.forEach(foreignKey->graph.addArc(foreignKey.getTbId(), foreignKey.getRefTbId()));
+		
+		boolean f = false;
+		try {
+			Accessibility access = new Accessibility(graph);
+			for (DataTableInfo dataTableInfo : datatables) {
+				if(access.prediction(datatable.getId(), dataTableInfo.getId())){
+					f = true;
+					break;
+				}
 			}
+		} catch (NoSuchVertexException e) {
+			throw new ServiceException("测试连通性是发生异常",e);
 		}
+		return f;
 	}
-
-
-	protected void addFrom(List<ViewGraphModel> graph, StringBuffer sBuffer) {
-		// 查询的表
-		sBuffer.append(" from ");
-		for (ViewGraphModel model : graph) {
-			sBuffer.append(model.getFrom().getTableName()).append(" ").append(model.getFrom().getId()).append(",");
-		}
-		sBuffer.deleteCharAt(sBuffer.length()-1);
-	}
-
-
-	protected void selectList(List<TableFieldInfo> tableFieldInfos, StringBuffer sBuffer) {
-		// 查询的字段
-		for (TableFieldInfo tableFieldInfo : tableFieldInfos) {
-			sBuffer.append(tableFieldInfo.getTbId())
-			.append(tableFieldInfo.getFieldName())
-			.append(" ").append(tableFieldInfo.getId()).append(",");
-		}
-		sBuffer.deleteCharAt(sBuffer.length()-1);
-	}
-	
-	private String on(TableFieldInfo fieldInfo){
-		StringBuffer buffer = new StringBuffer();
-		buffer.append(fieldInfo.getTbId()).append(".").append(fieldInfo.getFieldName());
-		return buffer.toString();
-	}
-	
-	
-	@Autowired
-	private ApplicationContext context;
-	
-	@Autowired
-	private DataTableInfoMapper tbMapper;
-	
-	@Autowired
-	private DataSetMapper dataSetMapper;
-	
-	@Autowired
-	private TableFieldInfoMapper tfMapper;
-	
-	@Autowired
-	private TableViewMapper tvMapper;
-	
-	@Autowired
-	private ViewFieldMapper vfMapper;
-	
-	@Autowired
-	private ViewFieldItemMapper vfiMapper;
-	
-	@Autowired
-	private ViewPathHeaderMapper vphMapper;
 	
 }
