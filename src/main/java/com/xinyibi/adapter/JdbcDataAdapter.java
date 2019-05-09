@@ -17,7 +17,6 @@ import com.xinyibi.App;
 import com.xinyibi.mapper.DataTableInfoMapper;
 import com.xinyibi.mapper.DatabaseInfoMapper;
 import com.xinyibi.pojo.DataTableInfo;
-import com.xinyibi.pojo.DataTableInfoExample;
 import com.xinyibi.pojo.DatabaseInfo;
 import com.xinyibi.pojo.TableFieldInfo;
 import com.xinyibi.service.FileService;
@@ -34,14 +33,13 @@ public class JdbcDataAdapter implements DataAdapter {
 		
 		ApplicationContext context = App.getApplicationContext();
 		
-		DataTableInfoMapper dataTableInfoMapper = context.getBean(DataTableInfoMapper.class);
-		DataTableInfoExample dateTableInfoExample = new DataTableInfoExample();
-		dateTableInfoExample.createCriteria().andIdIn(fields.stream().map(field->field.getTbId()).distinct().collect(Collectors.toList()));
-		List<DataTableInfo> selectByExample = dataTableInfoMapper.selectByExample(dateTableInfoExample);
-		if(selectByExample.isEmpty() || selectByExample.size() > 1) {
-			throw new IllegalArgumentException("获取字段数据表错误");
+		List<String> collect = fields.stream().map(field->field.getTbId()).distinct().collect(Collectors.toList());
+		if(collect.size() != 1) {
+			throw new IllegalArgumentException("数据字段只能来自同一数据表");
 		}
-		DataTableInfo dataTableInfo = selectByExample.get(0);
+		
+		DataTableInfoMapper dataTableInfoMapper = context.getBean(DataTableInfoMapper.class);
+		DataTableInfo dataTableInfo = dataTableInfoMapper.selectByPrimaryKey(collect.get(0));
 		
 		DatabaseInfoMapper databaseInfoMapper = context.getBean(DatabaseInfoMapper.class);
 		// 所属数据源
