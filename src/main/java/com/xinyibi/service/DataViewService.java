@@ -17,7 +17,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tsc9526.monalisa.core.query.datatable.DataMap;
 import com.tsc9526.monalisa.core.query.datatable.DataTable;
-import com.xinyibi.adapter.AbactractViewAdapter;
 import com.xinyibi.exception.NoSuchVertexException;
 import com.xinyibi.exception.ServiceException;
 import com.xinyibi.exception.UnreachableException;

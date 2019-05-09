@@ -58,14 +58,12 @@ public class Graph {
 	 * @return 如果value存在于某个定点的数据域中，则返回这个定点在定点表中的下标，否则返回-1
 	 */
 	public int indexOf(String value) {
-		int index = -1;
-		for (Vertex vertex : vertexs) {
-			index++;
-			if(vertex.getData().equals(value)) {
-				break;
-			}
+		for (int i = 0; i < vertexs.size(); i++) {
+			Vertex vertex = vertexs.get(i);
+			String data = vertex.getData();
+			if(data.equals(value)) return i;
 		}
-		return index;
+		return -1;
 	}
 	/**
 	 * 返回指定下标的两个顶点之间的弧长

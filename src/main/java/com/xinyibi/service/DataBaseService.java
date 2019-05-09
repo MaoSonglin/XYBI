@@ -22,10 +22,13 @@ import com.xinyibi.mapper.DataTableInfoMapper;
 import com.xinyibi.mapper.DatabaseInfoMapper;
 import com.xinyibi.mapper.ForeignKeyInfoMapper;
 import com.xinyibi.mapper.TableFieldInfoMapper;
+import com.xinyibi.model.Graph;
 import com.xinyibi.pojo.DataTableInfo;
+import com.xinyibi.pojo.DataTableInfoExample;
 import com.xinyibi.pojo.DatabaseInfo;
 import com.xinyibi.pojo.DatabaseInfoExample;
 import com.xinyibi.pojo.ForeignKeyInfo;
+import com.xinyibi.pojo.ForeignKeyInfoExample;
 import com.xinyibi.pojo.TableFieldInfo;
 import com.xinyibi.util.StrUtils;
 import com.xinyibi.vo.Message;
@@ -172,5 +175,17 @@ public class DataBaseService implements Serializable{
 		return Message.success("查询成功", new PageInfo<DatabaseInfo>(list));
 	}
 
+	/**
+	 * 获取系统中所有数据表组成的网
+	 * @return
+	 */
+	public Graph getGraph(){
+		Graph graph = new Graph();
+		List<DataTableInfo> tables = this.tbMapper.selectByExample(new DataTableInfoExample());
+		tables.forEach(dt->graph.addVertex(dt.getId()));
+		List<ForeignKeyInfo> foreignKeys = this.fkMapper.selectByExample(new ForeignKeyInfoExample());
+		foreignKeys.forEach(key->graph.addArc(key.getTbId(), key.getRefTbId()));
+		return graph;
+	}
 	
 }

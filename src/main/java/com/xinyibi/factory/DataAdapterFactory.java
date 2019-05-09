@@ -6,7 +6,7 @@ import com.xinyibi.pojo.DatabaseInfo;
 
 public class DataAdapterFactory {
 
-	public DataAdapter getDataAdapter(DatabaseInfo databaseInfo) {
+	public static DataAdapter getDataAdapter(DatabaseInfo databaseInfo) {
 		String type = databaseInfo.getDatabaseType();
 		if(type == null) {
 			return null;

@@ -1,10 +1,7 @@
 package com.xinyibi.adapter;
 
-import java.util.List;
-
 import com.tsc9526.monalisa.core.query.datatable.DataMap;
 import com.tsc9526.monalisa.core.query.datatable.DataTable;
-import com.xinyibi.pojo.ViewField;
 
 public interface ViewAdapter {
 	
@@ -14,6 +11,6 @@ public interface ViewAdapter {
 	 * @return
 	 * @throws Exception
 	 */
-	DataTable<DataMap> getDataTable(List<ViewField> viewFields) throws Exception;
+	DataTable<DataMap> getDataTable(String viewId) throws Exception;
 	
 }
