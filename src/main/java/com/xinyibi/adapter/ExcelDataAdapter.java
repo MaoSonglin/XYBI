@@ -7,7 +7,11 @@ import com.tsc9526.monalisa.core.query.datatable.DataTable;
 import com.xinyibi.pojo.TableFieldInfo;
 import com.xinyibi.vo.PageEntry;
 
-public interface DataAdapter {
-	
-	DataTable<DataMap> getDataTable(List<TableFieldInfo> fields,PageEntry pageEntry) throws Exception;
+public class ExcelDataAdapter implements DataAdapter {
+
+	@Override
+	public DataTable<DataMap> getDataTable(List<TableFieldInfo> fields, PageEntry pageEntry) throws Exception {
+		return null;
+	}
+
 }

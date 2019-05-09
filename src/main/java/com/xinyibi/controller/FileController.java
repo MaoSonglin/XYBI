@@ -99,5 +99,9 @@ public class FileController {
 		else
 			return Message.fail("保存失败", fileName);
 	}
-	
+	@RequestMapping("/url")
+	public Message<?> getFileUrl(Long id){
+		String url = context.getBean(FileService.class).getFileUrl(id);
+		return Message.success("成功", url);
+	}
 }
