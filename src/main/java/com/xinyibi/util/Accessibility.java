@@ -27,7 +27,6 @@ public class Accessibility {
 		Graph graph = new Graph();
 		for(int i = 1; i <= 4; i++)
 		graph.addVertex("t"+i);
-		
 		graph.addArc("t1", "t2",10);
 		graph.addArc("t1", "t3",2);
 		graph.addArc("t2", "t4",8);
