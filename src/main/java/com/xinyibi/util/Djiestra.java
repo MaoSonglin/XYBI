@@ -114,6 +114,11 @@ public class Djiestra {
 	public List<String> getPath(String start,String end,Graph g){
 		int indexOf = g.indexOf(start);	// 数据表的下标
 		if(indexOf == -1) throw new IllegalArgumentException(start);
+		if(start.equals(end)) {
+			ArrayList<String> arrayList = new ArrayList<>();
+			arrayList.add(start);
+			return arrayList;
+		}
 		// 存放所求节点到其他节点的最短路径上的前驱节点的下标
 		List<Integer> path = new ArrayList<>();
 		// 存放当前节点到各个节点的权值

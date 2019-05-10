@@ -53,7 +53,9 @@ public class Accessibility {
 	 * @throws NoSuchVertexException 顶点没找到
 	 */
 	public boolean prediction(String vertex1,String vertex2) throws NoSuchVertexException {
-		
+		if(vertex1 == null || vertex2 == null)
+			throw new IllegalArgumentException("计算路径的节点不能为NULL");
+		if(vertex1.equals(vertex2))return true;
 		int vIndex1 = graph.indexOf(vertex1);
 		if(vIndex1 == -1) {
 			throw new NoSuchVertexException(vertex1);
