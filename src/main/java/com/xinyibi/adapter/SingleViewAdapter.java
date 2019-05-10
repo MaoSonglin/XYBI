@@ -67,7 +67,9 @@ public class SingleViewAdapter implements ViewAdapter {
 			DataTable<DataMap> table = formula.map(viewFields);
 			return table;
 		}else{
-			return multiTable(context, dataTables);
+			DataTable<DataMap> multiTable = multiTable(context, dataTables);
+			Formula formula = new FormulaImpl(multiTable);
+			return formula.map(viewFields);
 		}
 		
 	}
