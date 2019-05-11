@@ -44,7 +44,7 @@ public class DataSetController implements Serializable{
 		Integer accountId = dataSet.getAccountId();
 		if(accountId == null){
 			// 设置用户ID
-			Account account = (Account) session.getAttribute(Account.class.getName());
+			Account account = (Account) session.getAttribute("Account");
 			if(account != null){
 				dataSet.setAccountId(account.getId());
 			}else{
@@ -68,7 +68,7 @@ public class DataSetController implements Serializable{
 	 * @param dataSet
 	 * @return
 	 */
-	@RequestMapping("/udpate")
+	@RequestMapping("/update")
 	public @ResponseBody Object udpate(DataSet dataSet){
 		String id = dataSet.getId();
 		if(StringUtils.isEmpty(id)){
@@ -96,6 +96,7 @@ public class DataSetController implements Serializable{
 	 * @param id 数据包ID
 	 * @return
 	 */
+	@RequestMapping("/delete")
 	public @ResponseBody Message<?> drop(String id){
 		try {
 			boolean f = dataSetService.dropById(id);

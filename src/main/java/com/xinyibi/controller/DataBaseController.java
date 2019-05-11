@@ -1,12 +1,19 @@
 package com.xinyibi.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 
 import com.xinyibi.pojo.DataTableInfo;
 import com.xinyibi.pojo.DatabaseInfo;
@@ -63,4 +70,17 @@ public class DataBaseController {
 		boolean update = dataBaseService.update(databaseInfo);
 		return update ? Message.success("修改成功", databaseInfo) : Message.fail("修改失败", databaseInfo);
 	}
+	
+	@RequestMapping("/read")
+	public Message<?> readStructure(String id){
+		Message<?> message = dataBaseService.getStructure(id);
+		return message;
+	}
+	
+	@InitBinder
+    public void initBinder(WebDataBinder binder, WebRequest request) {
+        //转换日期
+        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
 }
