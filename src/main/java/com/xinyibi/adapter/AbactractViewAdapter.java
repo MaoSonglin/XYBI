@@ -25,6 +25,7 @@ import com.xinyibi.vo.PageEntry;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Deprecated
 public abstract class AbactractViewAdapter implements Serializable {
 	
 	private static final long serialVersionUID = -3757485970995417930L;

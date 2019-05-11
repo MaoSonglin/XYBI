@@ -7,7 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tsc9526.monalisa.core.query.datatable.DataMap;
+import com.tsc9526.monalisa.core.query.datatable.DataTable;
 import com.xinyibi.service.TableInfoService;
+import com.xinyibi.vo.Message;
 import com.xinyibi.vo.PageEntry;
 
 @Controller
@@ -17,6 +20,12 @@ public class DataTableController {
 	@Autowired
 	private TableInfoService tableService;
 
+	/**
+	 * 分页查询显示记录
+	 * @param entry
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping("/page")
 	public @ResponseBody Object queryForPage(PageEntry entry,HttpSession session){
 		String name = PageEntry.class.getName();
@@ -39,5 +48,21 @@ public class DataTableController {
 	@RequestMapping("/columns")
 	public @ResponseBody Object getTableFields(String id){
 		return tableService.getByTableId(id);
+	}
+	
+	/**
+	 * 获取数据表中的数据
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/data")
+	public @ResponseBody Message<?> getData(String id){
+		try {
+			DataTable<DataMap> data = tableService.getData(id);
+			return Message.success("查询成功", data);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Message.error(e.getMessage(), e);
+		}
 	}
 }

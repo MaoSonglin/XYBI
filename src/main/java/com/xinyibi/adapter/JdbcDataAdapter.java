@@ -16,9 +16,11 @@ import com.tsc9526.monalisa.core.query.datatable.DataTable;
 import com.xinyibi.App;
 import com.xinyibi.mapper.DataTableInfoMapper;
 import com.xinyibi.mapper.DatabaseInfoMapper;
+import com.xinyibi.mapper.TableFieldInfoMapper;
 import com.xinyibi.pojo.DataTableInfo;
 import com.xinyibi.pojo.DatabaseInfo;
 import com.xinyibi.pojo.TableFieldInfo;
+import com.xinyibi.pojo.TableFieldInfoExample;
 import com.xinyibi.service.FileService;
 import com.xinyibi.util.DriverUtil;
 import com.xinyibi.vo.PageEntry;
@@ -99,10 +101,47 @@ public class JdbcDataAdapter implements DataAdapter {
 
 	protected void appendField(List<TableFieldInfo> tableFields, StringBuffer sBuffer) {
 		for (TableFieldInfo tableFieldInfo : tableFields) {
-			sBuffer.append(tableFieldInfo.getTbId()).append(".")
+			sBuffer/*.append(tableFieldInfo.getTbId()).append(".")*/
 			.append(tableFieldInfo.getFieldName())
-			.append(" ").append(tableFieldInfo.getId()).append(",");
+			/*.append(" ").append(tableFieldInfo.getId())*/.append(",");
 		}
 		sBuffer.deleteCharAt(sBuffer.length()-1);
+	}
+
+	@Override
+	public DataTable<DataMap> getDataTable(DataTableInfo dataTableInfo) throws Exception {
+		ApplicationContext context = App.getApplicationContext();
+		TableFieldInfoMapper mapper = context.getBean(TableFieldInfoMapper.class);
+		TableFieldInfoExample example = new TableFieldInfoExample();
+		example.createCriteria().andTbIdEqualTo(dataTableInfo.getId());
+		List<TableFieldInfo> fields = mapper.selectByExample(example);
+		
+		DatabaseInfo databaseInfo = context.getBean(DatabaseInfoMapper.class).selectByPrimaryKey(dataTableInfo.getDbId());
+		// 数据库驱动文件
+		Long databaseFileId = databaseInfo.getDatabaseFileId();
+		// 驱动文件访问路径
+		String fileUrl = context.getBean(FileService.class).getFileUrl(databaseFileId);
+		// 加载驱动
+		DriverUtil.loadDriverClass(databaseInfo.getDriverClassName(), fileUrl);
+		@Cleanup Connection conn = DriverManager.getConnection(databaseInfo.getUrl(), databaseInfo.getUname(), databaseInfo.getUpwd());
+		@Cleanup PreparedStatement ps = conn.prepareStatement("select count(*) count from "+dataTableInfo.getTableName());
+		@Cleanup ResultSet rs = ps.executeQuery();
+		long count = 0; 
+		if(rs.next()) {
+			count = rs.getLong(1);
+		}
+		log.debug("total record count in this table is "+count);
+		if(count < 1000) {
+			log.debug("load all data in this table");
+			long currentTimeMillis = System.currentTimeMillis();
+			DataTable<DataMap> tmp = simpleTableQuery(fields, dataTableInfo, databaseInfo);
+			log.debug("load data finish with times "+currentTimeMillis+" mis ");
+			return tmp;
+		}
+		log.debug("load top 1000 record in this table");
+		long currentTimeMillis = System.currentTimeMillis();
+		DataTable<DataMap> pageQuery = pageQuery(fields,dataTableInfo,databaseInfo);
+		log.debug("load data finish with times "+currentTimeMillis+" mis ");
+		return pageQuery;
 	}
 }

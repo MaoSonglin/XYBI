@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
@@ -186,6 +187,30 @@ public class DataBaseService implements Serializable{
 		List<ForeignKeyInfo> foreignKeys = this.fkMapper.selectByExample(new ForeignKeyInfoExample());
 		foreignKeys.forEach(key->graph.addArc(key.getTbId(), key.getRefTbId()));
 		return graph;
+	}
+
+	/**
+	 * 获取指定ID的数据库中的数据表
+	 * @param id 数据库ID
+	 * @return	数据表列表
+	 */
+	public List<DataTableInfo> getTables(String id) {
+		DataTableInfoExample example = new DataTableInfoExample();
+		example.createCriteria().andDbIdEqualTo(id);
+		List<DataTableInfo> list = tbMapper.selectByExample(example);
+		return list;
+	}
+
+	@Transactional
+	public boolean update(DatabaseInfo databaseInfo) {
+		int updateByPrimaryKeySelective = dbMapper.updateByPrimaryKeySelective(databaseInfo);
+		if(updateByPrimaryKeySelective > 0){
+			DatabaseInfo database = dbMapper.selectByPrimaryKey(databaseInfo.getId());
+			if(database!=null)
+			BeanUtils.copyProperties(database, databaseInfo);
+		}
+		return updateByPrimaryKeySelective>0;
+		
 	}
 	
 }

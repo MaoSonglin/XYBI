@@ -17,9 +17,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tsc9526.monalisa.core.query.datatable.DataMap;
 import com.tsc9526.monalisa.core.query.datatable.DataTable;
+import com.xinyibi.adapter.ViewAdapter;
 import com.xinyibi.exception.NoSuchVertexException;
 import com.xinyibi.exception.ServiceException;
 import com.xinyibi.exception.UnreachableException;
+import com.xinyibi.factory.ViewAdapterFactory;
 import com.xinyibi.mapper.DataSetMapper;
 import com.xinyibi.mapper.DataTableInfoMapper;
 import com.xinyibi.mapper.DatabaseInfoMapper;
@@ -256,15 +258,23 @@ public class DataViewService implements Serializable {
 		return new PageInfo<>(list);
 	}
 	
-	
-	public DataTable<DataMap> selectFromView(String viewId, PageEntry pageEntry) throws ServiceException{
-		ViewDetailModel model = getGraphInfo(viewId);
-		List<DatabaseInfo> databases = model.getDatabases();
+	/**
+	 * 查询视图中的数据
+	 * @param viewId	视图ID
+	 * @param pageEntry	过滤信息
+	 * @return
+	 * @throws Exception
+	 */
+	public DataTable<DataMap> selectFromView(String viewId, PageEntry pageEntry) throws Exception{
+		ViewAdapter adapter = ViewAdapterFactory.getViewAdapter();
+		DataTable<DataMap> dataTable = adapter.getDataTable(viewId);
+		System.gc();
 		
-		return null;// TODO
+		return dataTable;// TODO
 	}
 
 
+	@Deprecated
 	public ViewDetailModel getGraphInfo(String viewId) throws ServiceException {
 		// 查找视图
 		TableView view = tvMapper.selectByPrimaryKey(viewId);

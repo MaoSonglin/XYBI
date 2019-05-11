@@ -14,12 +14,10 @@ import com.tsc9526.monalisa.core.query.datatable.DataMap;
 import com.tsc9526.monalisa.core.query.datatable.DataTable;
 import com.xinyibi.App;
 import com.xinyibi.exception.NoSuchVertexException;
-import com.xinyibi.exception.ViewNotFoundException;
 import com.xinyibi.factory.DataAdapterFactory;
 import com.xinyibi.mapper.DataTableInfoMapper;
 import com.xinyibi.mapper.DatabaseInfoMapper;
 import com.xinyibi.mapper.ForeignKeyInfoMapper;
-import com.xinyibi.mapper.TableFieldInfoMapper;
 import com.xinyibi.mapper.TableViewMapper;
 import com.xinyibi.mapper.ViewFieldMapper;
 import com.xinyibi.model.Graph;
@@ -29,7 +27,6 @@ import com.xinyibi.pojo.DataTableInfoExample;
 import com.xinyibi.pojo.DatabaseInfo;
 import com.xinyibi.pojo.ForeignKeyInfo;
 import com.xinyibi.pojo.ForeignKeyInfoExample;
-import com.xinyibi.pojo.TableFieldInfo;
 import com.xinyibi.pojo.TableFieldInfoExample;
 import com.xinyibi.pojo.TableView;
 import com.xinyibi.pojo.ViewField;
@@ -67,7 +64,9 @@ public class SingleViewAdapter implements ViewAdapter {
 			DataTable<DataMap> table = formula.map(viewFields);
 			return table;
 		}else{
-			return multiTable(context, dataTables);
+			DataTable<DataMap> multiTable = multiTable(context, dataTables);
+			Formula formula = new FormulaImpl(multiTable);
+			return formula.map(viewFields);
 		}
 		
 	}
@@ -94,7 +93,7 @@ public class SingleViewAdapter implements ViewAdapter {
 			try {
 				return access.prediction(dataTables.get(0).getId(), table.getId());
 			} catch (NoSuchVertexException e) {
-				throw new IllegalStateException("判断数据表之间是否存在关联是错误异常",e);
+				throw new IllegalStateException("判断数据表之间是否存在关联时发出异常",e);
 			}
 		});
 		
@@ -215,35 +214,8 @@ public class SingleViewAdapter implements ViewAdapter {
 		DatabaseInfo databaseInfo = context.getBean(DatabaseInfoMapper.class).selectByPrimaryKey(dataTableInfo.getDbId());
 		
 		DataAdapter dataAdapter = DataAdapterFactory.getDataAdapter(databaseInfo);
-		List<TableFieldInfo> tableFields = context.getBean(TableFieldInfoMapper.class).selectByExample(ex);
-		DataTable<DataMap> dataTable = dataAdapter.getDataTable(tableFields, null);
+		DataTable<DataMap> dataTable = dataAdapter.getDataTable(dataTableInfo);
 		return dataTable;
-	}
-
-	DataTable<DataMap> loadTableTable(String viewId) throws Exception {
-		ApplicationContext context = App.getApplicationContext();
-		TableViewMapper viewMapper = context.getBean(TableViewMapper.class);
-		TableView view = viewMapper.selectByPrimaryKey(viewId);
-		if(view == null)
-			throw new ViewNotFoundException(viewId);
-
-		DataTableInfoMapper dataTableInfoMapper = context.getBean(DataTableInfoMapper.class);
-		List<DataTableInfo> dataTables = dataTableInfoMapper.findByViewId(viewId);
-		int size = dataTables.size();
-		if(size == 1){
-			DataTableInfo dataTableInfo = dataTables.get(0);
-			DatabaseInfo databaseInfo = context.getBean(DatabaseInfoMapper.class).selectByPrimaryKey(dataTableInfo.getDbId());
-			DataAdapter dataAdapter = DataAdapterFactory.getDataAdapter(databaseInfo);
-			return dataAdapter.getDataTable(null, null);
-		}
-		List<DataTableInfo> allTables = dataTableInfoMapper.selectByExample(new DataTableInfoExample());
-		Graph graph = new Graph();
-		allTables.forEach(i->graph.addVertex(i.getId()));
-		List<ForeignKeyInfo> selectByExample = context.getBean(ForeignKeyInfoMapper.class).selectByExample(new ForeignKeyInfoExample());
-		selectByExample.forEach(e->graph.addArc(e.getTbId(), e.getRefTbId()));
-		
-		return null;
-		
 	}
 
 }

@@ -34,11 +34,11 @@
 			<!-- enableSubPackages:是否让schema作为包的后缀 -->
 			<property name="enableSubPackages" value="false" />
 		</javaClientGenerator>
+		<table tableName="database_info"></table>
 		<!-- <table tableName="account"></table>
 		<table tableName="account_power"></table>
 		<table tableName="data_set"></table>
 		<table tableName="data_table_info"></table>
-		<table tableName="database_info"></table>
 		<table tableName="file_info"></table>
 		<table tableName="foreign_key_info"></table>
 		<table tableName="person"></table>
@@ -46,7 +46,7 @@
 		<table tableName="table_field_info"></table>
 		<table tableName="table_view"></table> -->
 <!-- 		<table tableName="view_field"></table> -->
-		<table tableName="view_field_item"></table>
+<!-- 		<table tableName="view_field_item"></table> -->
 <!-- 		<table tableName="view_vertex"></table> -->
 <!-- 		<table tableName="person" ></table> -->
 <!-- 		<table tableName="view_path_vertex"></table> -->

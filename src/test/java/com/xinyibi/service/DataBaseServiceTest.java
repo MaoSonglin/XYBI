@@ -3,6 +3,7 @@ package com.xinyibi.service;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,8 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xinyibi.XinyiBiResource;
+import com.xinyibi.exception.NoSuchVertexException;
+import com.xinyibi.model.Graph;
 import com.xinyibi.pojo.DatabaseInfo;
+import com.xinyibi.util.Accessibility;
+import com.xinyibi.util.Djiestra;
 import com.xinyibi.vo.Message;
 import com.xinyibi.vo.PageEntry;
 
@@ -65,6 +72,25 @@ public class DataBaseServiceTest {
 	public void run3(){
 		Message<?> structure = service.getStructure("DB0961114747");
 		System.out.println(structure);
+	}
+	
+	@Test
+	public void run4() throws JsonProcessingException, NoSuchVertexException{
+		Graph graph = service.getGraph();
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		String writeValueAsString = objectMapper.writeValueAsString(graph);
+		System.out.println(writeValueAsString);
+		
+		/*Djiestra djiestra = new Djiestra();
+		List<List<String>> path = djiestra.getPath("TB0961394184", graph);
+		for (List<String> list : path) {
+			System.out.println(list);
+		}*/
+		
+		Accessibility access = new Accessibility(graph);
+		boolean prediction = access.prediction("TB0961394184", "TB0961394196");
+		System.out.println(prediction);
 	}
 
 }

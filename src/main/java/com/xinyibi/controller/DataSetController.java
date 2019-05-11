@@ -10,12 +10,15 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
+import com.xinyibi.exception.ServiceException;
 import com.xinyibi.pojo.Account;
 import com.xinyibi.pojo.DataSet;
 import com.xinyibi.service.DataSetService;
 import com.xinyibi.util.StrUtils;
 import com.xinyibi.vo.Message;
+import com.xinyibi.vo.PageEntry;
 
 /**
  * @author MaoSonglin
@@ -73,4 +76,33 @@ public class DataSetController implements Serializable{
 		}
 		return dataSetService.update(dataSet);
 	}
+	
+	
+	/**
+	 * 查询
+	 * @param entry
+	 * @return
+	 */
+	@RequestMapping("/page")
+	public @ResponseBody Object list(PageEntry entry){
+		PageInfo<DataSet> page = dataSetService.queryForPage(entry);
+		Message<PageInfo<DataSet>> success = Message.success("查询成功", page);
+		return success;
+	}
+	
+	
+	/**
+	 * 删除数据包
+	 * @param id 数据包ID
+	 * @return
+	 */
+	public @ResponseBody Message<?> drop(String id){
+		try {
+			boolean f = dataSetService.dropById(id);
+			return f ? Message.success("删除成功", id) : Message.fail("删除失败", f);
+		} catch (ServiceException e) {
+			return Message.error(e.getMessage(), e);
+		}
+	}
+	
 }

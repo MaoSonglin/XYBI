@@ -5,9 +5,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.tsc9526.monalisa.core.query.datatable.DataMap;
+import com.tsc9526.monalisa.core.query.datatable.DataTable;
+import com.xinyibi.adapter.DataAdapter;
+import com.xinyibi.exception.ServiceException;
+import com.xinyibi.factory.DataAdapterFactory;
 import com.xinyibi.mapper.DataTableInfoMapper;
 import com.xinyibi.mapper.TableFieldInfoMapper;
 import com.xinyibi.pojo.DataTableInfo;
@@ -58,6 +64,12 @@ public class TableInfoService implements Serializable {
 		PageInfo<DataTableInfo> pageInfo = new PageInfo<>(list); 
 		return Message.success("查询成功", pageInfo);
 	}
+	
+	/**
+	 * 获取数据表中的字段
+	 * @param id
+	 * @return
+	 */
 	public Message<List<TableFieldInfo>> getByTableId(String id) {
 		if(id==null) return Message.fail("数据表ID不能为空", null);
 		
@@ -66,5 +78,19 @@ public class TableInfoService implements Serializable {
 		
 		List<TableFieldInfo> list = tfMapper.selectByExample(example);
 		return Message.success("查询成功", list);
+	}
+	
+	public DataTable<DataMap> getData(String id) throws Exception{
+		if(StringUtils.isEmpty(id)){
+			throw new ServiceException("数据表ID不能为空");
+		}
+		
+		DataTableInfo dataTableInfo = this.tbMapper.selectByPrimaryKey(id);
+		if(dataTableInfo == null)
+			throw new ServiceException("数据表不存在");
+		
+		DataAdapter adapter = DataAdapterFactory.getDataAdapter(dataTableInfo);
+		DataTable<DataMap> dataTable = adapter.getDataTable(dataTableInfo);
+		return dataTable;
 	}
 }

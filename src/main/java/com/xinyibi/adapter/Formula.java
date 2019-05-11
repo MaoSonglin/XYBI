@@ -1,6 +1,5 @@
 package com.xinyibi.adapter;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -73,7 +72,9 @@ class FormulaImpl implements Formula{
 	}
 
 	private Object calcute(Object a, Object b, String pop) {
-		// TODO Auto-generated method stub
+		Class<? extends Object> cls = a.getClass();
+		if(cls.isPrimitive()){
+		}
 		return null;
 	}
 
@@ -83,8 +84,79 @@ class FormulaImpl implements Formula{
 	 * @param content
 	 * @return
 	 */
-	private int equal(String pop, String content) {
-		return 0;
+	private int equal(String peek, String token) {
+		switch(peek){
+		case "+":
+		case "-":
+			switch(token){
+			case "+":
+			case "-":
+			case ")":
+			case "#":
+				return 1;
+			case "*":
+			case "/":
+			case "(":
+				return -1;
+			}
+			break;
+		case "*":
+		case "/":
+			switch(token){
+			case "+":
+			case "-":
+			case "*":
+			case "/":
+			case ")":
+			case "#":
+				return 1;
+			case "(":
+				return -1;
+			}
+			break;
+		case "(":
+			switch(token){
+			case "+":
+			case "-":
+			case "*":
+			case "/":
+			case "(":
+				return -1;
+			case ")":
+				return 0;
+			case "#":
+				throw new IllegalArgumentException();
+			}
+			break;
+		case ")":
+			switch(token){
+			case "+":
+			case "-":
+			case "*":
+			case "/":
+			case ")":
+			case "#":
+				return 1;
+			case "(":
+				throw new IllegalArgumentException();
+			}
+			break;
+		case "#":
+			switch(token){
+			case "+":
+			case "-":
+			case "*":
+			case "/":
+			case "(":
+				return -1;
+			case ")":
+				throw new IllegalArgumentException();
+			case "#":
+				return 0;
+			}
+			break;
+		}
+		throw new IllegalArgumentException();
 	}
 	
 }

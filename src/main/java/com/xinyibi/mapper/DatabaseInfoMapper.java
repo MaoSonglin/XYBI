@@ -6,28 +6,27 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface DatabaseInfoMapper {
+    long countByExample(DatabaseInfoExample example);
 
-	long countByExample(DatabaseInfoExample example);
+    int deleteByExample(DatabaseInfoExample example);
 
-	int deleteByExample(DatabaseInfoExample example);
+    int deleteByPrimaryKey(String id);
 
-	int deleteByPrimaryKey(String id);
+    int insert(DatabaseInfo record);
 
-	int insert(DatabaseInfo record);
+    int insertSelective(DatabaseInfo record);
 
-	int insertSelective(DatabaseInfo record);
+    List<DatabaseInfo> selectByExample(DatabaseInfoExample example);
 
-	List<DatabaseInfo> selectByExample(DatabaseInfoExample example);
+    DatabaseInfo selectByPrimaryKey(String id);
 
-	DatabaseInfo selectByPrimaryKey(String id);
+    int updateByExampleSelective(@Param("record") DatabaseInfo record, @Param("example") DatabaseInfoExample example);
 
-	int updateByExampleSelective(@Param("record") DatabaseInfo record, @Param("example") DatabaseInfoExample example);
+    int updateByExample(@Param("record") DatabaseInfo record, @Param("example") DatabaseInfoExample example);
 
-	int updateByExample(@Param("record") DatabaseInfo record, @Param("example") DatabaseInfoExample example);
+    int updateByPrimaryKeySelective(DatabaseInfo record);
 
-	int updateByPrimaryKeySelective(DatabaseInfo record);
-
-	int updateByPrimaryKey(DatabaseInfo record);
+    int updateByPrimaryKey(DatabaseInfo record);
 
 	List<DatabaseInfo> findByViewId(String viewId);
 }

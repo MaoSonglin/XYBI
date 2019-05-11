@@ -60,6 +60,7 @@ public class ViewFieldService {
 	 * @param tableFieldId	数据字段ID
 	 * @return
 	 * @throws ServiceException 服务层异常
+	 * @deprecated 使用DataViewService.addViewField(String viewId,String fieldId)
 	 */
 	@Deprecated
 	@Transactional
@@ -119,65 +120,9 @@ public class ViewFieldService {
 
 	
 	public void addTableFieldInfo(String viewId,String fieldId) throws ServiceException{
-		ViewDetailModel model = dataViewService.getGraphInfo(viewId);
-		// 关联的表
-		List<DataTableInfo> relatedTables = model.getRelatedTables();
-		TableFieldInfo tableFieldInfo = tableFieldMapper.selectByPrimaryKey(fieldId);
-		if(tableFieldInfo==null) throw new ServiceException("数据字段不存在");
-
-		DataTableInfo table = null;
-		for (DataTableInfo dataTableInfo : relatedTables) {
-			if(dataTableInfo.getId().equals(tableFieldInfo.getTbId())){
-				table = dataTableInfo;
-			}
-		}
-		// 创建视图字段
-		ViewField viewField = tableFieldToViewField(model.getView(), tableFieldInfo);
-		ViewFieldItem viewFieldItem = viewFieldItem(viewField,tableFieldInfo);
-		
-		if(table != null){
-			// 什么也不用
-		}else{
-			// 添加路径
-			table = dataTableInfoMapper.selectByPrimaryKey(tableFieldInfo.getTbId());
-			buildPath(table,relatedTables);
-			
-		}
 		
 	}
 	
-	private ViewDetailModel buildPath(DataTableInfo table, List<DataTableInfo> relatedTables) {
-		ViewDetailModel viewDetailModel = new ViewDetailModel();
-		ArrayList<ViewPathHeader> arrayList = new ArrayList<ViewPathHeader>();
-		ViewPathHeader headler = new ViewPathHeader();
-		headler.setId(StrUtils.getNextId());
-		headler.setTableId(table.getId());
-		arrayList.add(headler);
-
-		if(relatedTables.isEmpty()){
-			
-		}else{
-			List<String> tableIds = relatedTables.stream().map(item->item.getId()).collect(Collectors.toList());
-			ForeignKeyInfoExample foreignKeyInfoExample = new ForeignKeyInfoExample();
-			Criteria criteria = foreignKeyInfoExample.createCriteria();
-			criteria.andRefTbIdIn(tableIds);
-			criteria.andTbIdEqualTo(table.getId());
-			Criteria createCriteria = foreignKeyInfoExample.createCriteria();
-			createCriteria.andTbIdIn(tableIds);
-			createCriteria.andRefTbIdEqualTo(table.getId());
-			// 数据表table中的外键，该外键引用了relatedTables中某个表的某个字段
-			List<ForeignKeyInfo> selectByExample = foreignKeyInfoMapper.selectByExample(foreignKeyInfoExample);
-			for (ForeignKeyInfo foreignKeyInfo : selectByExample) {
-				String refTbId = foreignKeyInfo.getRefTbId();
-				ViewPathVertex vertex = new ViewPathVertex();
-				vertex.setHeaderId(headler.getId());
-				vertex.setTableId(refTbId);
-				vertex.setRightFieldId(foreignKeyInfo.getRefFdId());
-				vertex.setLeftFieldId(foreignKeyInfo.getFieldId());
-			}
-		}
-		return viewDetailModel;
-	}
 
 
 	/**
@@ -187,8 +132,10 @@ public class ViewFieldService {
 	 * @throws ServiceException	数据视图字段ID不存在
 	 */
 	@Transactional
-	public boolean dropViewField(String viewFieldId) throws ServiceException{
+	public boolean dropViewField(String id) throws ServiceException{
 		// TODO 如果没有任何图表引用该字段则成功，否则就失败
+		// 删除字段项
+		// 删除字段
 		return false;
 	}
 	

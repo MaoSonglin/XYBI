@@ -30,8 +30,11 @@ import com.xinyibi.pojo.FileInfo;
 import com.xinyibi.service.FileService;
 import com.xinyibi.vo.Message;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @RequestMapping("/file")
+@Slf4j
 public class FileController {
 
 	@Autowired
@@ -50,6 +53,8 @@ public class FileController {
 				+ "id, file_name, file_size, create_date, mime, status, path, account_id, body "
 				+ "from file_info "
 				+ "where id=?";
+		log.debug("find file with id "+id);
+		log.debug(sql);
 		try(Connection conn = ds.getConnection();
 				PreparedStatement ps = conn.prepareStatement(sql)){
 			ps.setLong(1, id);

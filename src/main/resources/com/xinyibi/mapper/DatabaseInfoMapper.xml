@@ -13,6 +13,7 @@
     <result column="database_file_id" jdbcType="BIGINT" property="databaseFileId" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="read" jdbcType="BIT" property="read" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, name, uname, upwd, url, driver_class_name, driver_file_id, database_type, database_file_id, 
-    add_time, comment
+    add_time, comment, read
   </sql>
   <select id="selectByExample" parameterType="com.xinyibi.pojo.DatabaseInfoExample" resultMap="BaseResultMap">
     select
@@ -110,11 +111,13 @@
     insert into database_info (id, name, uname, 
       upwd, url, driver_class_name, 
       driver_file_id, database_type, database_file_id, 
-      add_time, comment)
+      add_time, comment, read
+      )
     values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{uname,jdbcType=VARCHAR}, 
       #{upwd,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{driverClassName,jdbcType=VARCHAR}, 
       #{driverFileId,jdbcType=BIGINT}, #{databaseType,jdbcType=VARCHAR}, #{databaseFileId,jdbcType=BIGINT}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{comment,jdbcType=VARCHAR})
+      #{addTime,jdbcType=TIMESTAMP}, #{comment,jdbcType=VARCHAR}, #{read,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.xinyibi.pojo.DatabaseInfo">
     insert into database_info
@@ -152,6 +155,9 @@
       <if test="comment != null">
         comment,
       </if>
+      <if test="read != null">
+        read,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -186,6 +192,9 @@
       </if>
       <if test="comment != null">
         #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="read != null">
+        #{read,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -231,6 +240,9 @@
       <if test="record.comment != null">
         comment = #{record.comment,jdbcType=VARCHAR},
       </if>
+      <if test="record.read != null">
+        read = #{record.read,jdbcType=BIT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -248,7 +260,8 @@
       database_type = #{record.databaseType,jdbcType=VARCHAR},
       database_file_id = #{record.databaseFileId,jdbcType=BIGINT},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
-      comment = #{record.comment,jdbcType=VARCHAR}
+      comment = #{record.comment,jdbcType=VARCHAR},
+      read = #{record.read,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -286,6 +299,9 @@
       <if test="comment != null">
         comment = #{comment,jdbcType=VARCHAR},
       </if>
+      <if test="read != null">
+        read = #{read,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -300,17 +316,10 @@
       database_type = #{databaseType,jdbcType=VARCHAR},
       database_file_id = #{databaseFileId,jdbcType=BIGINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      comment = #{comment,jdbcType=VARCHAR}
+      comment = #{comment,jdbcType=VARCHAR},
+      read = #{read,jdbcType=BIT}
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  
-  
-  
-  
-  
-  
-  
-  
   <select id="findByViewId" parameterType="java.lang.String" resultMap="BaseResultMap">
   	SELECT 
 		db.id, db.name, db.uname, db.upwd, db.url, db.driver_class_name, 
@@ -323,7 +332,4 @@
 	JOIN database_info db ON dt.db_id = db.id
 	WHERE v.id = #{id}
   </select>
-  
-  
-  
 </mapper>

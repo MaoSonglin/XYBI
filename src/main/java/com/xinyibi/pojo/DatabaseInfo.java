@@ -3,104 +3,123 @@ package com.xinyibi.pojo;
 import java.util.Date;
 
 public class DatabaseInfo {
+    private String id;
 
-	private String id;
-	private String name;
-	private String uname;
-	private String upwd;
-	private String url;
-	private String driverClassName;
-	private Long driverFileId;
-	private String databaseType;
-	private Long databaseFileId;
-	private Date addTime;
-	private String comment;
+    private String name;
 
-	public String getId() {
-		return id;
-	}
+    private String uname;
 
-	public void setId(String id) {
-		this.id = id == null ? null : id.trim();
-	}
+    private String upwd;
 
-	public String getName() {
-		return name;
-	}
+    private String url;
 
-	public void setName(String name) {
-		this.name = name == null ? null : name.trim();
-	}
+    private String driverClassName;
 
-	public String getUname() {
-		return uname;
-	}
+    private Long driverFileId;
 
-	public void setUname(String uname) {
-		this.uname = uname == null ? null : uname.trim();
-	}
+    private String databaseType;
 
-	public String getUpwd() {
-		return upwd;
-	}
+    private Long databaseFileId;
 
-	public void setUpwd(String upwd) {
-		this.upwd = upwd == null ? null : upwd.trim();
-	}
+    private Date addTime;
 
-	public String getUrl() {
-		return url;
-	}
+    private String comment;
 
-	public void setUrl(String url) {
-		this.url = url == null ? null : url.trim();
-	}
+    private Boolean read;
 
-	public String getDriverClassName() {
-		return driverClassName;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setDriverClassName(String driverClassName) {
-		this.driverClassName = driverClassName == null ? null : driverClassName.trim();
-	}
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
+    }
 
-	public Long getDriverFileId() {
-		return driverFileId;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setDriverFileId(Long driverFileId) {
-		this.driverFileId = driverFileId;
-	}
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
 
-	public String getDatabaseType() {
-		return databaseType;
-	}
+    public String getUname() {
+        return uname;
+    }
 
-	public void setDatabaseType(String databaseType) {
-		this.databaseType = databaseType == null ? null : databaseType.trim();
-	}
+    public void setUname(String uname) {
+        this.uname = uname == null ? null : uname.trim();
+    }
 
-	public Long getDatabaseFileId() {
-		return databaseFileId;
-	}
+    public String getUpwd() {
+        return upwd;
+    }
 
-	public void setDatabaseFileId(Long databaseFileId) {
-		this.databaseFileId = databaseFileId;
-	}
+    public void setUpwd(String upwd) {
+        this.upwd = upwd == null ? null : upwd.trim();
+    }
 
-	public Date getAddTime() {
-		return addTime;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public void setAddTime(Date addTime) {
-		this.addTime = addTime;
-	}
+    public void setUrl(String url) {
+        this.url = url == null ? null : url.trim();
+    }
 
-	public String getComment() {
-		return comment;
-	}
+    public String getDriverClassName() {
+        return driverClassName;
+    }
 
-	public void setComment(String comment) {
-		this.comment = comment == null ? null : comment.trim();
-	}
+    public void setDriverClassName(String driverClassName) {
+        this.driverClassName = driverClassName == null ? null : driverClassName.trim();
+    }
+
+    public Long getDriverFileId() {
+        return driverFileId;
+    }
+
+    public void setDriverFileId(Long driverFileId) {
+        this.driverFileId = driverFileId;
+    }
+
+    public String getDatabaseType() {
+        return databaseType;
+    }
+
+    public void setDatabaseType(String databaseType) {
+        this.databaseType = databaseType == null ? null : databaseType.trim();
+    }
+
+    public Long getDatabaseFileId() {
+        return databaseFileId;
+    }
+
+    public void setDatabaseFileId(Long databaseFileId) {
+        this.databaseFileId = databaseFileId;
+    }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment == null ? null : comment.trim();
+    }
+
+    public Boolean getRead() {
+        return read;
+    }
+
+    public void setRead(Boolean read) {
+        this.read = read;
+    }
 }

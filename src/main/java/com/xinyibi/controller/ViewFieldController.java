@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xinyibi.exception.ServiceException;
+import com.xinyibi.pojo.ViewField;
 import com.xinyibi.service.ViewFieldService;
 import com.xinyibi.vo.Message;
 
@@ -21,21 +22,13 @@ public class ViewFieldController implements Serializable {
 	private ViewFieldService viewFieldService;
 	
 	/**
-	 * 在数据字段的基础上新建视图字段
-	 * @param viewId	新建视图字段所属的视图的ID
-	 * @param fieldId	数据字段ID
+	 * 添加视图字段
 	 * @return
 	 */
 	@RequestMapping("/add")
 	@ResponseBody
-	public Object addField(String viewId,String fieldId){
-		try {
-			boolean flag = viewFieldService.createViewFieldByTableField(viewId, fieldId);
-			return Message.success(flag ? "添加成功":"添加失败", flag);
-		} catch (ServiceException e) {
-			e.printStackTrace();
-			return Message.error(e.getMessage(), e);
-		} 
+	public Object addField(ViewField view){
+		return null; 
 	}
 	
 	/**
