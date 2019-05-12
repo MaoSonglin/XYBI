@@ -1,13 +1,12 @@
 package com.xinyibi.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.xinyibi.exception.ServiceException;
 import com.xinyibi.mapper.DataTableInfoMapper;
@@ -16,17 +15,12 @@ import com.xinyibi.mapper.TableFieldInfoMapper;
 import com.xinyibi.mapper.TableViewMapper;
 import com.xinyibi.mapper.ViewFieldItemMapper;
 import com.xinyibi.mapper.ViewFieldMapper;
-import com.xinyibi.model.ViewDetailModel;
 import com.xinyibi.pojo.DataTableInfo;
-import com.xinyibi.pojo.ForeignKeyInfo;
-import com.xinyibi.pojo.ForeignKeyInfoExample;
-import com.xinyibi.pojo.ForeignKeyInfoExample.Criteria;
 import com.xinyibi.pojo.TableFieldInfo;
 import com.xinyibi.pojo.TableView;
 import com.xinyibi.pojo.ViewField;
+import com.xinyibi.pojo.ViewFieldExample;
 import com.xinyibi.pojo.ViewFieldItem;
-import com.xinyibi.pojo.ViewPathHeader;
-import com.xinyibi.pojo.ViewPathVertex;
 import com.xinyibi.util.StrUtils;
 
 @Service
@@ -137,6 +131,24 @@ public class ViewFieldService {
 		// 删除字段项
 		// 删除字段
 		return false;
+	}
+
+
+	/**
+	 * 根据视图ID获取字段
+	 * @param viewId 视图ID
+	 * @return 字段列表
+	 * @throws ServiceException 如果ID为空字符串或者为null
+	 */
+	public List<ViewField> getByViewId(String viewId) throws ServiceException {
+		
+		if(StringUtils.isEmpty(viewId)) throw new ServiceException("视图ID不能为空");
+		
+		ViewFieldExample example = new ViewFieldExample();
+		example.createCriteria().andViewIdEqualTo(viewId);
+		List<ViewField> list = viewFieldMapper.selectByExample(example);
+		
+		return list;
 	}
 	
 }

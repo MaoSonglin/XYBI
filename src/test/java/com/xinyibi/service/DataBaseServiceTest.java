@@ -3,7 +3,6 @@ package com.xinyibi.service;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +18,6 @@ import com.xinyibi.exception.NoSuchVertexException;
 import com.xinyibi.model.Graph;
 import com.xinyibi.pojo.DatabaseInfo;
 import com.xinyibi.util.Accessibility;
-import com.xinyibi.util.Djiestra;
 import com.xinyibi.vo.Message;
 import com.xinyibi.vo.PageEntry;
 

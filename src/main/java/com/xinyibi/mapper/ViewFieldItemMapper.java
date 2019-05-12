@@ -29,4 +29,6 @@ public interface ViewFieldItemMapper {
     int updateByPrimaryKey(ViewFieldItem record);
 
 	int insertList(List<ViewFieldItem> viewFieldItems);
+	
+	List<ViewFieldItem> selectByViewId(Long id);
 }

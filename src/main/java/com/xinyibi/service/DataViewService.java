@@ -49,7 +49,6 @@ import com.xinyibi.pojo.ViewField;
 import com.xinyibi.pojo.ViewFieldExample;
 import com.xinyibi.pojo.ViewFieldItem;
 import com.xinyibi.pojo.ViewFieldItemExample;
-import com.xinyibi.pojo.ViewPathHeader;
 import com.xinyibi.util.Accessibility;
 import com.xinyibi.util.StrUtils;
 import com.xinyibi.vo.CreateViewVo;
@@ -114,7 +113,7 @@ public class DataViewService implements Serializable {
 		List<TableView> views = new ArrayList<>();
 		List<ViewField> viewFields = new ArrayList<>();
 		List<ViewFieldItem> viewFieldItems = new ArrayList<>();
-		List<ViewPathHeader> paths = new ArrayList<>();
+//		List<ViewPathHeader> paths = new ArrayList<>();
 		// 遍历数据表ID，为每一个数据表建立一个新的属于数据集的视图
 		for (String tabid : dataTableIds) {
 			DataTableInfo dataTable = tbMapper.selectByPrimaryKey(tabid);
@@ -159,13 +158,13 @@ public class DataViewService implements Serializable {
 				viewFieldItems.add(item);
 			}
 			
-			// 为每一张视图建立一条路径点
+			/*// 为每一张视图建立一条路径点
 			ViewPathHeader path = new ViewPathHeader();
 			path.setId(StrUtils.getNextId());
 			path.setTableId(tabid);
 			path.setViewId(view.getId());
 			
-			paths.add(path);
+			paths.add(path);*/
 		}
 		
 		int insertList  = tvMapper.insertList(views);
@@ -179,7 +178,7 @@ public class DataViewService implements Serializable {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		
-		return Message.success("添加失败", null);
+		return Message.fail("添加失败", null);
 	}
 
 	
@@ -322,11 +321,17 @@ public class DataViewService implements Serializable {
 	 * @throws 如果视图不存在，或者字段不存在
 	 */
 	@Transactional
-	public boolean addViewField(String viewId, String fieldId) throws ServiceException, UnreachableException {
+	public boolean addViewField(String vid, String fieldId) throws ServiceException, UnreachableException {
 		
-		TableView view = tvMapper.selectByPrimaryKey(viewId);
+		TableView view = tvMapper.selectByPrimaryKey(vid);
 		if(view == null) throw new ServiceException("视图不存在");
 		
+		return addFieldToView(fieldId, view);
+		
+	}
+
+
+	protected boolean addFieldToView(String fieldId, TableView view) throws ServiceException, UnreachableException {
 		TableFieldInfo fieldInfo = tfMapper.selectByPrimaryKey(fieldId);
 		if(fieldInfo == null) throw new ServiceException("字段不存在");
 		
@@ -335,7 +340,7 @@ public class DataViewService implements Serializable {
 		viewField.setDataType(fieldInfo.getJavaType());
 		viewField.setFieldName(fieldInfo.getFieldName());
 		viewField.setFieldZhChName(fieldInfo.getFieldZhChName());
-		viewField.setViewId(viewId);
+		viewField.setViewId(view.getId());
 		viewField.setId(StrUtils.getNextId());
 		
 		ViewFieldItem item = new ViewFieldItem();
@@ -349,10 +354,11 @@ public class DataViewService implements Serializable {
 		viewField.setItems(items);
 		
 		// 获取视图view中包含的数据表
-		List<DataTableInfo> datatables = tbMapper.findByViewId(viewId);
+		List<DataTableInfo> datatables = tbMapper.findByViewId(view.getId());
 		if(datatables.isEmpty()){
-			log.debug("ID为%s的数据视图没有引用任何数据表...",viewId);
-			return save(viewField, item);
+			log.debug("ID为%s的数据视图没有引用任何数据表...",view.getId());
+			boolean save = save(viewField, item);
+			return save;
 		}
 		else{
 			Iterator<DataTableInfo> iter = datatables.stream().filter(datatable->datatable.getId().equals(fieldInfo.getId())).iterator();
@@ -368,14 +374,24 @@ public class DataViewService implements Serializable {
 				if(f){
 					return save(viewField,item);
 				}else{
-					UnreachableException exception = new UnreachableException(String.format("ID为'%s'的字段所在的数据表与ID为'%s'的视图关联的数据表之间没有关联关系", fieldId,viewId));
+					UnreachableException exception = new UnreachableException(String.format("ID为'%s'的字段所在的数据表与ID为'%s'的视图关联的数据表之间没有关联关系", fieldId,view.getId()));
 					throw exception;
 				}
 			}
 		}
-		
 	}
 
+	
+	@Transactional
+	public boolean addViewFields(String viewId, List<String> fields) throws ServiceException, UnreachableException{
+		TableView view = tvMapper.selectByPrimaryKey(viewId);
+		if(view == null) throw new ServiceException("视图不存在");
+		boolean f = true;
+		for (String fieldId : fields) {
+			f = f && addFieldToView(fieldId,view);
+		}
+		return f;
+	}
 
 	private boolean save(ViewField viewField, ViewFieldItem item) throws ServiceException {
 		int insert = this.vfMapper.insert(viewField);

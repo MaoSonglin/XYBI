@@ -325,7 +325,7 @@
 		JOIN view_field vf ON tv.id = vf.view_id
 		JOIN view_field_item vfi ON vf.id = vfi.view_field_id
 		JOIN table_field_info tf ON vfi.table_field_id = tf.id
-		WHERE vt.id = #{id}
+		WHERE tv.id = #{id}
   </select>
   
 </mapper>

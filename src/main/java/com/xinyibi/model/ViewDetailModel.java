@@ -8,6 +8,7 @@ import com.xinyibi.pojo.DatabaseInfo;
 import com.xinyibi.pojo.TableFieldInfo;
 import com.xinyibi.pojo.TableView;
 import com.xinyibi.pojo.ViewField;
+import com.xinyibi.util.StrUtils;
 
 import lombok.Data;
 
@@ -27,4 +28,11 @@ public class ViewDetailModel implements Serializable{
 	private List<DatabaseInfo> databases;
 	
 	private List<ViewGraphModel> graph;
+
+	@Override
+	public String toString() {
+		return StrUtils.toString(this);
+	}
+	
+
 }

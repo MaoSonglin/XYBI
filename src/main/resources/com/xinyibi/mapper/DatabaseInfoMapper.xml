@@ -321,15 +321,94 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="findByViewId" parameterType="java.lang.String" resultMap="BaseResultMap">
-  	SELECT 
-		db.id, db.name, db.uname, db.upwd, db.url, db.driver_class_name, 
-		db.driver_file_id, db.database_type, db.database_file_id, 
-    	db.add_time, db.comment
+  	SELECT DISTINCT
+		db.id,
+		db.name,
+		db.uname,
+		db.upwd,
+		db.url,
+		db.driver_class_name,
+		db.driver_file_id,
+		db.database_type,
+		db.database_file_id,
+		db.add_time,
+		db.comment
 	FROM
-		view_field v
+		database_info db
+	JOIN data_table_info dt ON dt.db_id = db.id
+	JOIN table_field_info tf ON tf.tb_id = dt.id
+	JOIN view_field_item vfi ON vfi.table_field_id = tf.id
+	JOIN view_field vf ON vf.id = vfi.view_field_id
+	JOIN table_view v ON vf.view_id = v.id
+	WHERE 
+		v.id = #{id}
+  </select>
+  
+  <select id="findByViewIdByExists" parameterType="java.lang.String" resultMap="BaseResultMap">
+	  SELECT
+		db.id,
+		db.name,
+		db.uname,
+		db.upwd,
+		db.url,
+		db.driver_class_name,
+		db.driver_file_id,
+		db.database_type,
+		db.database_file_id,
+		db.add_time,
+		db.comment
+	FROM
+		database_info db
+	WHERE
+		EXISTS (
+			SELECT
+				1
+			FROM
+				data_table_info dt
+			WHERE
+				dt.db_id = db.id
+			AND EXISTS (
+				SELECT
+					1
+				FROM
+					table_field_info tf
+				WHERE
+					dt.id = tf.tb_id
+				AND (
+					SELECT
+						1
+					FROM
+						view_field_item vfi
+					WHERE
+						vfi.table_field_id = tf.id
+					AND EXISTS (
+						SELECT
+							1
+						FROM
+							view_field vf
+						WHERE
+							vf.id = vfi.view_field_id
+						AND EXISTS (
+							SELECT
+								1
+							FROM
+								table_view v
+							WHERE
+								v.id = vf.view_id
+							AND v.id = #{ id }
+						)
+					)
+				)
+			)
+		)
+  </select>
+  
+<!-- 		table_view v
 	JOIN view_path_header h ON v.id = h.view_id
 	JOIN data_table_info dt ON h.table_id = dt.id
 	JOIN database_info db ON dt.db_id = db.id
-	WHERE v.id = #{id}
-  </select>
+
+  
+
+	WHERE v.id = #{id} -->
 </mapper>

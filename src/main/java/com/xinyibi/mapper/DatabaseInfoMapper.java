@@ -29,4 +29,6 @@ public interface DatabaseInfoMapper {
     int updateByPrimaryKey(DatabaseInfo record);
 
 	List<DatabaseInfo> findByViewId(String viewId);
+	
+	List<DatabaseInfo> findByViewIdByExists(String viewId);
 }

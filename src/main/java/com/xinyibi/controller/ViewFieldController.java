@@ -1,9 +1,11 @@
 package com.xinyibi.controller;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -47,4 +49,17 @@ public class ViewFieldController implements Serializable {
 			return Message.error(e.getMessage(), e);
 		}
 	}
+	
+	@ResponseBody
+	@RequestMapping("/listByView/{viewId}")
+	public Object listByView(@PathVariable String viewId){
+		try {
+			List<ViewField> list = viewFieldService.getByViewId(viewId);
+			return Message.success("查询成功", list);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+			return Message.error(e.getMessage(), e);
+		} 
+	}
+	
 }

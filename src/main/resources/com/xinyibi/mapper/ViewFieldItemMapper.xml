@@ -68,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, content, type, order, table_field_id, view_field_id
+    id, content, type, "order", table_field_id, view_field_id
   </sql>
   <select id="selectByExample" parameterType="com.xinyibi.pojo.ViewFieldItemExample" resultMap="BaseResultMap">
     select
@@ -90,9 +90,9 @@
     from view_field_item
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="selectByViewId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByViewId" parameterType="java.lang.Long" resultMap="BaseResultMap" resultType="java.util.List">
   	select 
-    f.id, f.content, f.type, f.order, f.table_field_id, f.view_field_id
+    f.id, f.content, f.type, f."order", f.table_field_id, f.view_field_id
     from view_field_item f join view_field v on v.id = f.view_field_id
     where f.view_field_id = #{id,jdbcType=BIGINT}
   </select>
@@ -108,7 +108,7 @@
   </delete>
   <insert id="insert" parameterType="com.xinyibi.pojo.ViewFieldItem">
     insert into view_field_item (id, content, type, 
-      order, table_field_id, view_field_id
+      "order", table_field_id, view_field_id
       )
     values (#{id,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
       #{order,jdbcType=INTEGER}, #{tableFieldId,jdbcType=VARCHAR}, #{viewFieldId,jdbcType=BIGINT}
@@ -116,7 +116,7 @@
   </insert>
   <insert id="insertList" parameterType="java.util.List">
   	insert into view_field_item (id, content, type, 
-      order, table_field_id, view_field_id
+      "order", table_field_id, view_field_id
       )
     values
     <foreach collection="list" item="item" separator=",">
@@ -138,7 +138,7 @@
         type,
       </if>
       <if test="order != null">
-        order,
+        "order",
       </if>
       <if test="tableFieldId != null">
         table_field_id,

@@ -35,7 +35,7 @@ public class Message<T> {
 	}
 	
 	public static Message<String> unaccessable(){
-		return new Message<String>(25323,"您没有登录获取登录已过期",null);
+		return new Message<String>(25323,"您没有登录或者登录已过期",null);
 	}
 	
 	public static<T> Message<T> error(String message,T data){
