@@ -2,8 +2,6 @@ package com.xinyibi.adapter;
 
 import java.util.Date;
 
-import org.assertj.core.util.DateUtil;
-
 import com.xinyibi.exception.ParserException;
 
 public interface ValueParser<T> {
@@ -41,7 +39,7 @@ class DateParser implements ValueParser<Date>{
 			e.printStackTrace();
 		}
 		try {
-			return DateUtil.parseDatetimeWithMs(o.toString());
+//			return DateUtil.parseDatetimeWithMs(o.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

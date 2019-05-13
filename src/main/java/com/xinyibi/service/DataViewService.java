@@ -450,5 +450,19 @@ public class DataViewService implements Serializable {
 		}
 		return f;
 	}
+
+
+	public boolean remove(String viewId, List<String> fields) throws ServiceException {
+		TableView tableView = this.tvMapper.selectByPrimaryKey(viewId);
+		if(tableView == null)
+			throw new ServiceException("数据视图不存在");
+		/**
+		 * delete from view_field_info where view_id = ? and id in (
+		 * 		select vf.id from view_field vf join view_field_item vfi on vfi.view_field_id = vf.id
+		 * 		join table_field_info tf on tf.id = vfi.table_field_id where tf.id in (?)
+		 * )
+		 */
+		return false;
+	}
 	
 }

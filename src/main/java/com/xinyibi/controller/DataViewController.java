@@ -79,6 +79,22 @@ public class DataViewController implements Serializable{
 		}
 	}
 	
+	
+	/**
+	 * 从视图中删除指定的数据字段
+	 * @param view	视图ID
+	 * @param fields data_table_info的ID
+	 * @return
+	 */
+	public @ResponseBody Message<?> removeViewFields(String view, List<String> fields){
+		try {
+			dataViewService.remove(view,fields);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	@RequestMapping("/update")
 	public @ResponseBody Object update(TableView view){
 		String id = view.getId();

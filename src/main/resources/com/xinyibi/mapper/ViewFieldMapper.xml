@@ -253,4 +253,28 @@
       view_id = #{viewId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- 通过数据字段ID和视图ID删除视图字段 -->
+  <delete id="deleteByViewIdAndDataFieldIds" parameterType="map">
+  	delete from view_field where view_id = #{viewId} and id in (
+		  		select vf.id from view_field vf join view_field_item vfi on vfi.view_field_id = vf.id
+		  		join table_field_info tf on tf.id = vfi.table_field_id
+	<where>
+		<foreach collection="fieldIds" item="id" open="tf.id in (" close=")" separator="," >
+			#{id}
+		</foreach>
+	</where> 
+	)
+  </delete>
+  
+  
 </mapper>

@@ -39,7 +39,7 @@ public class App implements WebMvcConfigurer,ApplicationContextAware
     
     	DataSource ds = context.getBean(DataSource.class);
     	try (Connection conn = ds.getConnection();){
-			String sql = "select count(1) from account";
+			String sql = "select count(1) from view_path_vertex";
 			try(Statement statement = conn.createStatement();){
 				statement.execute(sql);
 			}

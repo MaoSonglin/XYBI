@@ -29,4 +29,12 @@ public interface ViewFieldMapper {
     int updateByPrimaryKey(ViewField record);
 
 	int insertList(List<ViewField> viewFields);
+	
+	/**
+	 * 删除视图viewId中与字段fieldIds相关联的字段
+	 * @param viewId	视图ID
+	 * @param fieldIds	数据字段ID
+	 * @return
+	 */
+	int deleteByViewIdAndDataFieldIds(@Param("viewId") String viewId, @Param("fieldIds") List<String> fieldIds);
 }
