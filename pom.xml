@@ -132,6 +132,45 @@
           <artifactId>maven-deploy-plugin</artifactId>
           <version>2.8.2</version>
         </plugin>
+		<!-- 打包命令： mvn clean package appassembler:assemble -DskipTests -->
+        <!-- 直接启动 java -Djava.ext.dirs=lib com.xinyibi.App -->
+        <plugin>
+		    <groupId>org.codehaus.mojo</groupId>
+		    <artifactId>appassembler-maven-plugin</artifactId>
+		    <version>2.0.0</version>
+		    <configuration>
+			    <platforms>
+			    	<platform>windows</platform>
+			    	<platform>unix</platform>
+			    </platforms>
+			    <!-- 根目录 -->
+				<assembleDirectory>
+					${project.build.directory}/XYBI
+				</assembleDirectory>
+				<repositoryName>lib</repositoryName>
+				<binFolder>bin</binFolder>
+				<configurationDirectory>conf</configurationDirectory>
+				<copyConfigurationDirectory>true</copyConfigurationDirectory>
+				<configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
+				<repositoryLayout>flat</repositoryLayout>
+				<encoding>UTF-8</encoding>
+				<logsDirectory>logs</logsDirectory>
+				<tempDirectory>tmp</tempDirectory>
+				<programs>
+					<program>
+						<id>XYBI</id>
+						<mainClass>com.xinyibi.App</mainClass>
+						<jvmSettings>
+							<extraArguments>
+								<extraArgument>-server</extraArgument>
+								<extraArgument>-Xmx512M</extraArgument>
+								<extraArgument>-Xms128M</extraArgument>
+							</extraArguments>
+						</jvmSettings>
+					</program>
+				</programs>
+		    </configuration>
+		</plugin>
       </plugins>
     </pluginManagement>
   </build>
