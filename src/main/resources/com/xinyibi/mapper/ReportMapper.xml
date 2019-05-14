@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyibi.mapper.ReportMapper">
+  <resultMap id="BaseResultMap" type="com.xinyibi.pojo.Report">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="min_width" jdbcType="FLOAT" property="minWidth" />
+    <result column="width" jdbcType="FLOAT" property="width" />
+    <result column="max_width" jdbcType="FLOAT" property="maxWidth" />
+    <result column="min_height" jdbcType="FLOAT" property="minHeight" />
+    <result column="height" jdbcType="FLOAT" property="height" />
+    <result column="max_height" jdbcType="FLOAT" property="maxHeight" />
+    <result column="thumbnail" jdbcType="VARCHAR" property="thumbnail" />
+    <result column="lack" jdbcType="VARCHAR" property="lack" />
+    <result column="add_time" jdbcType="VARCHAR" property="addTime" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, name, min_width, width, max_width, min_height, height, max_height, thumbnail, 
+    lack, add_time, description
+  </sql>
+  <select id="selectByExample" parameterType="com.xinyibi.pojo.ReportExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from report
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from report
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from report
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xinyibi.pojo.ReportExample">
+    delete from report
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xinyibi.pojo.Report">
+    insert into report (id, name, min_width, 
+      width, max_width, min_height, 
+      height, max_height, thumbnail, 
+      lack, add_time, description
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{minWidth,jdbcType=FLOAT}, 
+      #{width,jdbcType=FLOAT}, #{maxWidth,jdbcType=FLOAT}, #{minHeight,jdbcType=FLOAT}, 
+      #{height,jdbcType=FLOAT}, #{maxHeight,jdbcType=FLOAT}, #{thumbnail,jdbcType=VARCHAR}, 
+      #{lack,jdbcType=VARCHAR}, #{addTime,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xinyibi.pojo.Report">
+    insert into report
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="minWidth != null">
+        min_width,
+      </if>
+      <if test="width != null">
+        width,
+      </if>
+      <if test="maxWidth != null">
+        max_width,
+      </if>
+      <if test="minHeight != null">
+        min_height,
+      </if>
+      <if test="height != null">
+        height,
+      </if>
+      <if test="maxHeight != null">
+        max_height,
+      </if>
+      <if test="thumbnail != null">
+        thumbnail,
+      </if>
+      <if test="lack != null">
+        lack,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="minWidth != null">
+        #{minWidth,jdbcType=FLOAT},
+      </if>
+      <if test="width != null">
+        #{width,jdbcType=FLOAT},
+      </if>
+      <if test="maxWidth != null">
+        #{maxWidth,jdbcType=FLOAT},
+      </if>
+      <if test="minHeight != null">
+        #{minHeight,jdbcType=FLOAT},
+      </if>
+      <if test="height != null">
+        #{height,jdbcType=FLOAT},
+      </if>
+      <if test="maxHeight != null">
+        #{maxHeight,jdbcType=FLOAT},
+      </if>
+      <if test="thumbnail != null">
+        #{thumbnail,jdbcType=VARCHAR},
+      </if>
+      <if test="lack != null">
+        #{lack,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xinyibi.pojo.ReportExample" resultType="java.lang.Long">
+    select count(*) from report
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update report
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.minWidth != null">
+        min_width = #{record.minWidth,jdbcType=FLOAT},
+      </if>
+      <if test="record.width != null">
+        width = #{record.width,jdbcType=FLOAT},
+      </if>
+      <if test="record.maxWidth != null">
+        max_width = #{record.maxWidth,jdbcType=FLOAT},
+      </if>
+      <if test="record.minHeight != null">
+        min_height = #{record.minHeight,jdbcType=FLOAT},
+      </if>
+      <if test="record.height != null">
+        height = #{record.height,jdbcType=FLOAT},
+      </if>
+      <if test="record.maxHeight != null">
+        max_height = #{record.maxHeight,jdbcType=FLOAT},
+      </if>
+      <if test="record.thumbnail != null">
+        thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lack != null">
+        lack = #{record.lack,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addTime != null">
+        add_time = #{record.addTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update report
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      min_width = #{record.minWidth,jdbcType=FLOAT},
+      width = #{record.width,jdbcType=FLOAT},
+      max_width = #{record.maxWidth,jdbcType=FLOAT},
+      min_height = #{record.minHeight,jdbcType=FLOAT},
+      height = #{record.height,jdbcType=FLOAT},
+      max_height = #{record.maxHeight,jdbcType=FLOAT},
+      thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
+      lack = #{record.lack,jdbcType=VARCHAR},
+      add_time = #{record.addTime,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xinyibi.pojo.Report">
+    update report
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="minWidth != null">
+        min_width = #{minWidth,jdbcType=FLOAT},
+      </if>
+      <if test="width != null">
+        width = #{width,jdbcType=FLOAT},
+      </if>
+      <if test="maxWidth != null">
+        max_width = #{maxWidth,jdbcType=FLOAT},
+      </if>
+      <if test="minHeight != null">
+        min_height = #{minHeight,jdbcType=FLOAT},
+      </if>
+      <if test="height != null">
+        height = #{height,jdbcType=FLOAT},
+      </if>
+      <if test="maxHeight != null">
+        max_height = #{maxHeight,jdbcType=FLOAT},
+      </if>
+      <if test="thumbnail != null">
+        thumbnail = #{thumbnail,jdbcType=VARCHAR},
+      </if>
+      <if test="lack != null">
+        lack = #{lack,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xinyibi.pojo.Report">
+    update report
+    set name = #{name,jdbcType=VARCHAR},
+      min_width = #{minWidth,jdbcType=FLOAT},
+      width = #{width,jdbcType=FLOAT},
+      max_width = #{maxWidth,jdbcType=FLOAT},
+      min_height = #{minHeight,jdbcType=FLOAT},
+      height = #{height,jdbcType=FLOAT},
+      max_height = #{maxHeight,jdbcType=FLOAT},
+      thumbnail = #{thumbnail,jdbcType=VARCHAR},
+      lack = #{lack,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
