@@ -10,7 +10,7 @@
     <result column="field_type" jdbcType="VARCHAR" property="fieldType" />
     <result column="view_id" jdbcType="VARCHAR" property="viewId" />
     <collection property="items" javaType="java.util.List" ofType="com.xinyibi.pojo.ViewFieldItem"
-     column="id" select="com.xinyibi.mapper.ViewFieldItemMapper.selectByViewId"  />
+     column="id" select="com.xinyibi.mapper.ViewFieldItemMapper.selectByViewId" fetchType="lazy" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>

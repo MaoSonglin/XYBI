@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinyibi.mapper.ElementMapper">
+  <resultMap id="BaseResultMap" type="com.xinyibi.pojo.Element">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="height" jdbcType="FLOAT" property="height" />
+    <result column="width" jdbcType="FLOAT" property="width" />
+    <result column="margin_left" jdbcType="FLOAT" property="marginLeft" />
+    <result column="margin_top" jdbcType="FLOAT" property="marginTop" />
+    <result column="margin_right" jdbcType="FLOAT" property="marginRight" />
+    <result column="margin_bottom" jdbcType="FLOAT" property="marginBottom" />
+    <result column="setting" jdbcType="VARCHAR" property="setting" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <collection property="fields" ofType="com.xinyibi.pojo.ViewField" javaType="java.util.List"
+    	column="id" fetchType="lazy"  
+    	 select="findRelatedViewFields"/>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, name, title, height, width, margin_left, margin_top, margin_right, margin_bottom, 
+    setting, description
+  </sql>
+  <select id="selectByExample" parameterType="com.xinyibi.pojo.ElementExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from element
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from element
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from element
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xinyibi.pojo.ElementExample">
+    delete from element
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xinyibi.pojo.Element">
+    insert into element (id, name, title, 
+      height, width, margin_left, 
+      margin_top, margin_right, margin_bottom, 
+      setting, description)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{height,jdbcType=FLOAT}, #{width,jdbcType=FLOAT}, #{marginLeft,jdbcType=FLOAT}, 
+      #{marginTop,jdbcType=FLOAT}, #{marginRight,jdbcType=FLOAT}, #{marginBottom,jdbcType=FLOAT}, 
+      #{setting,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xinyibi.pojo.Element">
+    insert into element
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="height != null">
+        height,
+      </if>
+      <if test="width != null">
+        width,
+      </if>
+      <if test="marginLeft != null">
+        margin_left,
+      </if>
+      <if test="marginTop != null">
+        margin_top,
+      </if>
+      <if test="marginRight != null">
+        margin_right,
+      </if>
+      <if test="marginBottom != null">
+        margin_bottom,
+      </if>
+      <if test="setting != null">
+        setting,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null">
+        #{height,jdbcType=FLOAT},
+      </if>
+      <if test="width != null">
+        #{width,jdbcType=FLOAT},
+      </if>
+      <if test="marginLeft != null">
+        #{marginLeft,jdbcType=FLOAT},
+      </if>
+      <if test="marginTop != null">
+        #{marginTop,jdbcType=FLOAT},
+      </if>
+      <if test="marginRight != null">
+        #{marginRight,jdbcType=FLOAT},
+      </if>
+      <if test="marginBottom != null">
+        #{marginBottom,jdbcType=FLOAT},
+      </if>
+      <if test="setting != null">
+        #{setting,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xinyibi.pojo.ElementExample" resultType="java.lang.Long">
+    select count(*) from element
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update element
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.height != null">
+        height = #{record.height,jdbcType=FLOAT},
+      </if>
+      <if test="record.width != null">
+        width = #{record.width,jdbcType=FLOAT},
+      </if>
+      <if test="record.marginLeft != null">
+        margin_left = #{record.marginLeft,jdbcType=FLOAT},
+      </if>
+      <if test="record.marginTop != null">
+        margin_top = #{record.marginTop,jdbcType=FLOAT},
+      </if>
+      <if test="record.marginRight != null">
+        margin_right = #{record.marginRight,jdbcType=FLOAT},
+      </if>
+      <if test="record.marginBottom != null">
+        margin_bottom = #{record.marginBottom,jdbcType=FLOAT},
+      </if>
+      <if test="record.setting != null">
+        setting = #{record.setting,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update element
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
+      height = #{record.height,jdbcType=FLOAT},
+      width = #{record.width,jdbcType=FLOAT},
+      margin_left = #{record.marginLeft,jdbcType=FLOAT},
+      margin_top = #{record.marginTop,jdbcType=FLOAT},
+      margin_right = #{record.marginRight,jdbcType=FLOAT},
+      margin_bottom = #{record.marginBottom,jdbcType=FLOAT},
+      setting = #{record.setting,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xinyibi.pojo.Element">
+    update element
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null">
+        height = #{height,jdbcType=FLOAT},
+      </if>
+      <if test="width != null">
+        width = #{width,jdbcType=FLOAT},
+      </if>
+      <if test="marginLeft != null">
+        margin_left = #{marginLeft,jdbcType=FLOAT},
+      </if>
+      <if test="marginTop != null">
+        margin_top = #{marginTop,jdbcType=FLOAT},
+      </if>
+      <if test="marginRight != null">
+        margin_right = #{marginRight,jdbcType=FLOAT},
+      </if>
+      <if test="marginBottom != null">
+        margin_bottom = #{marginBottom,jdbcType=FLOAT},
+      </if>
+      <if test="setting != null">
+        setting = #{setting,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xinyibi.pojo.Element">
+    update element
+    set name = #{name,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      height = #{height,jdbcType=FLOAT},
+      width = #{width,jdbcType=FLOAT},
+      margin_left = #{marginLeft,jdbcType=FLOAT},
+      margin_top = #{marginTop,jdbcType=FLOAT},
+      margin_right = #{marginRight,jdbcType=FLOAT},
+      margin_bottom = #{marginBottom,jdbcType=FLOAT},
+      setting = #{setting,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- 查找element关联的字段 -->
+  <select id="findRelatedViewFields" parameterType="java.util.Long" resultMap="com.xinyibi.pojo.ViewField.BaseResultMap">
+  	select vf.* from view_field vf join element_field ef on vf.id = ef.field_id where ef.element_id = #{id}
+  </select>
+  
+</mapper>

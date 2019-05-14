@@ -150,5 +150,11 @@ public class ViewFieldService {
 		
 		return list;
 	}
+
+
+	public boolean update(ViewField viewField) {
+		int i = viewFieldMapper.updateByPrimaryKeySelective(viewField);
+		return i > 0;
+	}
 	
 }
