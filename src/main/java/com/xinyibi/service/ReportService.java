@@ -8,11 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xinyibi.dao.ReportElementDao;
+import com.xinyibi.exception.ServiceException;
 import com.xinyibi.mapper.ElementMapper;
 import com.xinyibi.mapper.ReportMapper;
+import com.xinyibi.model.ReportElement;
 import com.xinyibi.pojo.Element;
 import com.xinyibi.pojo.ElementExample;
 import com.xinyibi.pojo.Report;
@@ -90,5 +94,32 @@ public class ReportService {
 	public boolean update(Report report) {
 		int i = context.getBean(ReportMapper.class).updateByPrimaryKeySelective(report);
 		return i > 0;
+	}
+
+
+	/**
+	 * 向图表中添加元素
+	 * @param reportElement
+	 * @return
+	 * @throws ServiceException 
+	 */
+	@Transactional
+	public boolean addReportElement(ReportElement reportElement) throws ServiceException {
+		Report report = context.getBean(ReportMapper.class).selectByPrimaryKey(reportElement.getId());
+		if(report == null) throw new ServiceException("报表不存在");
+		List<Element> elements = reportElement.getElements();
+		
+		int count = 0;
+		for (Element element : elements) {
+			element.setId(StrUtils.getNextId());
+			count = context.getBean(ElementMapper.class).insert(element);
+			count += context.getBean(ReportElementDao.class).insert(reportElement.getId(), element.getId());
+		}
+		if(count % 2 == 0){
+			return true;
+		}else{
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return false;
+		}
 	}
 }

@@ -25,7 +25,12 @@ public class ElementController {
 		return addElement ? Message.success("添加成功", e) : Message.fail("添加失败", e);
 	}
 	
-	@RequestMapping("/list")
+	/**
+	 * 获取指定图表中的所有元素
+	 * @param reportId
+	 * @return
+	 */
+	@RequestMapping("/getByReport")
 	public Message<?> list(Long reportId){
 		List<Element> list = null;
 		try {
@@ -49,4 +54,31 @@ public class ElementController {
 		boolean b = service.updateElement(e);
 		return b ? Message.success("修改成功", e) : Message.fail("修改失败", e);
 	}
+	
+	
+	/**
+	 * 向元素中添加一个子弹
+	 * @param elementId		元素ID
+	 * @param viewFieldId	字段ID
+	 * @return
+	 */
+	@RequestMapping("/add/data")
+	public Message<?> addViewField(Long elementId, Long viewFieldId){
+		boolean f = service.addViewField(elementId,viewFieldId);
+		
+		return f ? Message.success("添加成功", null) : Message.fail("添加失败", null);
+	}
+	
+	/**
+	 * 从元素中移除一个字段
+	 * @param elementId
+	 * @param viewFieldId
+	 * @return
+	 */
+	@RequestMapping("/remove/field")
+	public Message<?> removeViewField(Long elementId, Long viewFieldId){
+		boolean b = service.removeViewField(elementId,viewFieldId);
+		return b? Message.success("移除成功", b) : Message.fail("移除失败", b);
+	}
+	
 }

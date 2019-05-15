@@ -1,5 +1,7 @@
 package com.xinyibi.pojo;
 
+import java.util.List;
+
 public class Element {
     private Long id;
 
@@ -23,6 +25,8 @@ public class Element {
 
     private String description;
 
+    private List<ViewField> fields;
+    
     public Long getId() {
         return id;
     }
@@ -110,4 +114,12 @@ public class Element {
     public void setDescription(String description) {
         this.description = description == null ? null : description.trim();
     }
+
+	public List<ViewField> getFields() {
+		return fields;
+	}
+
+	public void setFields(List<ViewField> fields) {
+		this.fields = fields;
+	}
 }

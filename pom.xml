@@ -133,6 +133,7 @@
           <version>2.8.2</version>
         </plugin>
 		<!-- 打包命令： mvn clean package appassembler:assemble -DskipTests -->
+        <!-- 直接启动 java -Djava.ext.dirs=lib dat.App -->
         <!-- 直接启动 java -Djava.ext.dirs=lib com.xinyibi.App -->
         <plugin>
 		    <groupId>org.codehaus.mojo</groupId>

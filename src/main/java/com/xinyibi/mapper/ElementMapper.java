@@ -1,11 +1,14 @@
 package com.xinyibi.mapper;
 
-import com.xinyibi.pojo.Element;
-import com.xinyibi.pojo.ElementExample;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
+
+import com.xinyibi.pojo.Element;
+import com.xinyibi.pojo.ElementExample;
+import com.xinyibi.pojo.ViewField;
 
 public interface ElementMapper {
     long countByExample(ElementExample example);
@@ -33,4 +36,11 @@ public interface ElementMapper {
 	@Select("select e.* from element e join report_element re on e.id = re.element_id join report r on r.id = re.report_id where r.id = #{id}")
 	@ResultMap("com.xinyibi.mapper.ElementMapper.BaseResultMap")
 	List<Element> findByReportId(Long id);
+	
+	/**
+	 * 获取指定ID的元素关联的字段
+	 * @param id
+	 * @return
+	 */
+	List<ViewField> findRelatedViewFields(Long id);
 }

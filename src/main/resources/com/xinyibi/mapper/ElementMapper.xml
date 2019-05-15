@@ -13,6 +13,9 @@
     <result column="margin_bottom" jdbcType="FLOAT" property="marginBottom" />
     <result column="setting" jdbcType="VARCHAR" property="setting" />
     <result column="description" jdbcType="VARCHAR" property="description" />
+    <collection property="fields" ofType="com.xinyibi.pojo.ViewField" javaType="java.util.List"
+    	column="id" fetchType="lazy"  
+    	 select="findRelatedViewFields"/>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -303,4 +306,18 @@
       description = #{description,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- 查找element关联的字段 -->
+  <select id="findRelatedViewFields" parameterType="java.util.Long" resultMap="com.xinyibi.pojo.ViewField.BaseResultMap">
+  	select vf.* from view_field vf join element_field ef on vf.id = ef.field_id where ef.element_id = #{id}
+  </select>
+  
 </mapper>
