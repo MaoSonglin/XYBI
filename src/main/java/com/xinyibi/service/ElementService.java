@@ -7,10 +7,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tsc9526.monalisa.core.query.datatable.DataMap;
+import com.tsc9526.monalisa.core.query.datatable.DataTable;
 import com.xinyibi.exception.ServiceException;
 import com.xinyibi.mapper.ElementMapper;
 import com.xinyibi.pojo.Element;
 import com.xinyibi.util.StrUtils;
+import com.xinyibi.vo.DataQueryVo;
 
 @Service
 public class ElementService {
@@ -47,5 +50,18 @@ public class ElementService {
 		if(reportId == null) throw new ServiceException("请指定报表ID");
 		List<Element> elements = context.getBean(ElementMapper.class).findByReportId(reportId);
 		return elements;
+	}
+	
+	
+	/**
+	 * 查询指定元素所属要的数据
+	 * @param vo
+	 * @return
+	 */
+	public DataTable<DataMap> getData(DataQueryVo vo){
+		// 获取元素需要查询的视图
+		Element element = context.getBean(ElementMapper.class).selectByPrimaryKey(vo.getElementId());
+//		context.getBean(E)
+		return null;
 	}
 }
