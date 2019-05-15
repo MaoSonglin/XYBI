@@ -2,6 +2,9 @@ package com.xinyibi.pojo;
 
 import java.util.Date;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class TableView {
 
 	private String id;
